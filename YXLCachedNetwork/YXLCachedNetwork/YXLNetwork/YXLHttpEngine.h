@@ -10,6 +10,8 @@
 
 @class YXLRequestModel, YXLError;
 
+#define YXLResponseDataErrorDomain @"YXLResponseDataErrorDomain"
+
 typedef void(^ResponseSuceessBlock)(id data);
 typedef void(^ResponseFailureBlock)(YXLError *error);
 
@@ -17,6 +19,11 @@ typedef NS_ENUM(NSInteger, YXLNetworkCode) {
     YXLNetworkSuccessCode = 0,
     YXLNetworkNotLoginCode,
     YXLNetworkTimeoutCode
+};
+
+typedef NS_ENUM(NSInteger, YXLParseJsonErrorCode) {
+    YXLParseJsonEmptyError = 0,
+    YXLDataEmptyError    
 };
 
 @interface YXLHttpEngine : NSObject

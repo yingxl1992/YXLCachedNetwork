@@ -10,6 +10,8 @@
 		E217DE7F1C59B77300C6CA21 /* YXLHttpEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = E217DE7E1C59B77300C6CA21 /* YXLHttpEngine.m */; };
 		E217DE821C59E9D000C6CA21 /* YXLError.m in Sources */ = {isa = PBXBuildFile; fileRef = E217DE811C59E9D000C6CA21 /* YXLError.m */; };
 		E217DE861C59EC3500C6CA21 /* YXLUserModel.m in Sources */ = {isa = PBXBuildFile; fileRef = E217DE851C59EC3500C6CA21 /* YXLUserModel.m */; };
+		E22927E01C5B0CC200D3CDDE /* YXLURLCache.m in Sources */ = {isa = PBXBuildFile; fileRef = E22927DF1C5B0CC200D3CDDE /* YXLURLCache.m */; };
+		E22927E31C5B630400D3CDDE /* YXLAlertController.m in Sources */ = {isa = PBXBuildFile; fileRef = E22927E21C5B630400D3CDDE /* YXLAlertController.m */; };
 		E2D0DFA31C5750A800E446A1 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = E2D0DFA21C5750A800E446A1 /* main.m */; };
 		E2D0DFA61C5750A800E446A1 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E2D0DFA51C5750A800E446A1 /* AppDelegate.m */; };
 		E2D0DFA91C5750A800E446A1 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E2D0DFA81C5750A800E446A1 /* ViewController.m */; };
@@ -46,6 +48,10 @@
 		E217DE811C59E9D000C6CA21 /* YXLError.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = YXLError.m; path = YXLNetwork/YXLError.m; sourceTree = "<group>"; };
 		E217DE841C59EC3500C6CA21 /* YXLUserModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YXLUserModel.h; sourceTree = "<group>"; };
 		E217DE851C59EC3500C6CA21 /* YXLUserModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YXLUserModel.m; sourceTree = "<group>"; };
+		E22927DE1C5B0CC200D3CDDE /* YXLURLCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = YXLURLCache.h; path = YXLNetwork/YXLURLCache.h; sourceTree = "<group>"; };
+		E22927DF1C5B0CC200D3CDDE /* YXLURLCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = YXLURLCache.m; path = YXLNetwork/YXLURLCache.m; sourceTree = "<group>"; };
+		E22927E11C5B630400D3CDDE /* YXLAlertController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = YXLAlertController.h; path = YXLNetwork/YXLAlertController.h; sourceTree = "<group>"; };
+		E22927E21C5B630400D3CDDE /* YXLAlertController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = YXLAlertController.m; path = YXLNetwork/YXLAlertController.m; sourceTree = "<group>"; };
 		E2D0DF9E1C5750A800E446A1 /* YXLCachedNetwork.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = YXLCachedNetwork.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E2D0DFA21C5750A800E446A1 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		E2D0DFA41C5750A800E446A1 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -93,13 +99,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		E217DE831C59EC2100C6CA21 /* View */ = {
+		E217DE831C59EC2100C6CA21 /* Demo */ = {
 			isa = PBXGroup;
 			children = (
+				E2D0DFA41C5750A800E446A1 /* AppDelegate.h */,
+				E2D0DFA51C5750A800E446A1 /* AppDelegate.m */,
+				E2D0DFA71C5750A800E446A1 /* ViewController.h */,
+				E2D0DFA81C5750A800E446A1 /* ViewController.m */,
+				E2D0DFAA1C5750A800E446A1 /* Main.storyboard */,
+				E2D0DFAD1C5750A800E446A1 /* Assets.xcassets */,
+				E2D0DFAF1C5750A800E446A1 /* LaunchScreen.storyboard */,
+				E2D0DFB21C5750A800E446A1 /* Info.plist */,
+				E2D0DFA11C5750A800E446A1 /* Supporting Files */,
 				E217DE841C59EC3500C6CA21 /* YXLUserModel.h */,
 				E217DE851C59EC3500C6CA21 /* YXLUserModel.m */,
 			);
-			name = View;
+			name = Demo;
 			sourceTree = "<group>";
 		};
 		E2D0DF951C5750A800E446A1 = {
@@ -125,18 +140,9 @@
 		E2D0DFA01C5750A800E446A1 /* YXLCachedNetwork */ = {
 			isa = PBXGroup;
 			children = (
-				E217DE831C59EC2100C6CA21 /* View */,
+				E217DE831C59EC2100C6CA21 /* Demo */,
 				E2D0DFD51C57524200E446A1 /* YXLCache */,
 				E2D0DFD41C57523600E446A1 /* YXLNetwork */,
-				E2D0DFA41C5750A800E446A1 /* AppDelegate.h */,
-				E2D0DFA51C5750A800E446A1 /* AppDelegate.m */,
-				E2D0DFA71C5750A800E446A1 /* ViewController.h */,
-				E2D0DFA81C5750A800E446A1 /* ViewController.m */,
-				E2D0DFAA1C5750A800E446A1 /* Main.storyboard */,
-				E2D0DFAD1C5750A800E446A1 /* Assets.xcassets */,
-				E2D0DFAF1C5750A800E446A1 /* LaunchScreen.storyboard */,
-				E2D0DFB21C5750A800E446A1 /* Info.plist */,
-				E2D0DFA11C5750A800E446A1 /* Supporting Files */,
 			);
 			path = YXLCachedNetwork;
 			sourceTree = "<group>";
@@ -170,14 +176,18 @@
 		E2D0DFD41C57523600E446A1 /* YXLNetwork */ = {
 			isa = PBXGroup;
 			children = (
+				E22927E11C5B630400D3CDDE /* YXLAlertController.h */,
+				E22927E21C5B630400D3CDDE /* YXLAlertController.m */,
+				E217DE801C59E9D000C6CA21 /* YXLError.h */,
+				E217DE811C59E9D000C6CA21 /* YXLError.m */,
 				E2D0DFD61C5762DC00E446A1 /* YXLHttpClient.h */,
 				E2D0DFD71C5762DC00E446A1 /* YXLHttpClient.m */,
 				E217DE7D1C59B77300C6CA21 /* YXLHttpEngine.h */,
 				E217DE7E1C59B77300C6CA21 /* YXLHttpEngine.m */,
 				E2DFDC851C57786D00628CB0 /* YXLRequestModel.h */,
 				E2DFDC861C57786D00628CB0 /* YXLRequestModel.m */,
-				E217DE801C59E9D000C6CA21 /* YXLError.h */,
-				E217DE811C59E9D000C6CA21 /* YXLError.m */,
+				E22927DE1C5B0CC200D3CDDE /* YXLURLCache.h */,
+				E22927DF1C5B0CC200D3CDDE /* YXLURLCache.m */,
 			);
 			name = YXLNetwork;
 			sourceTree = "<group>";
@@ -326,8 +336,10 @@
 				E2D0DFA91C5750A800E446A1 /* ViewController.m in Sources */,
 				E217DE7F1C59B77300C6CA21 /* YXLHttpEngine.m in Sources */,
 				E2D0DFA61C5750A800E446A1 /* AppDelegate.m in Sources */,
+				E22927E31C5B630400D3CDDE /* YXLAlertController.m in Sources */,
 				E2DFDC871C57786D00628CB0 /* YXLRequestModel.m in Sources */,
 				E2D0DFD81C5762DC00E446A1 /* YXLHttpClient.m in Sources */,
+				E22927E01C5B0CC200D3CDDE /* YXLURLCache.m in Sources */,
 				E217DE861C59EC3500C6CA21 /* YXLUserModel.m in Sources */,
 				E2D0DFA31C5750A800E446A1 /* main.m in Sources */,
 			);

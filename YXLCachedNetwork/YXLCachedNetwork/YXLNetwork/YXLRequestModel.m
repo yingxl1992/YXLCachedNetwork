@@ -16,6 +16,8 @@
         self.requestMethod = @"GET";
         self.host = @"http://127.0.0.1";
         self.port = @"8080";
+        self.requestCachePolicy = YXLRequestCacheBothLocalAndRemoteData;
+        self.showToast = YES;
     }
     return self;
 }

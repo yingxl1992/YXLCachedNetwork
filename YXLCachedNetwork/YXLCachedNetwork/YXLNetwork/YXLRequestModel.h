@@ -8,6 +8,28 @@
 
 #import <Foundation/Foundation.h>
 
+/**
+ *  URL缓存策略
+ */
+typedef NS_ENUM(NSInteger, YXLRequestCachePolicy) {
+    /**
+     *  先返回缓存数据（如果存在），再请求网络数据
+     */
+    YXLRequestCacheBothLocalAndRemoteData,
+    /**
+     *  忽略缓存，重新请求数据
+     */
+    YXLRequestCacheIgnoringLocalData,
+    /**
+     *  使用缓存数据，若无缓存，请求网络数据
+     */
+    YXLRequestCacheLocalDataElseLoad,
+    /**
+     *  只使用缓存数据，不请求网络数据
+     */
+    YXLRequestCacheLocalDataDontLoad
+};
+
 @interface YXLRequestModel : NSObject
 
 /**
@@ -28,5 +50,15 @@
 @property (nonatomic, strong) NSString *port;
 
 @property (nonatomic, strong) NSString *functionId;
+
+/**
+ *  默认是YXLRequestCacheBothLocalAndRemoteData
+ */
+@property (nonatomic, assign) YXLRequestCachePolicy requestCachePolicy;
+
+/**
+ *  默认为YES
+ */
+@property (nonatomic, assign) BOOL showToast;
 
 @end

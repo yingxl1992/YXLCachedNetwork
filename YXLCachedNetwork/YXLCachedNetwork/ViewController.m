@@ -9,20 +9,21 @@
 #import "ViewController.h"
 #import "YXLHttpClient.h"
 #import "YXLRequestModel.h"
+#import "YXLError.h"
 
 @interface ViewController ()
+
+@property (nonatomic, strong) UIAlertController *alertController;
 
 @end
 
 @implementation ViewController
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    // Do any additional setup after loading the view, typically from a nib.
-    
+- (IBAction)startRequese:(id)sender {
     YXLRequestModel *model = [[YXLRequestModel alloc] init];
     model.functionId = @"users";
     model.params = nil;
+//    model.showToast = NO;
     
     YXLHttpClient *httpClient = [[YXLHttpClient alloc] init];
     [httpClient fetchDataWithRequestModel:model
@@ -38,6 +39,12 @@
                                       
                                   }];
 }
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    // Do any additional setup after loading the view, typically from a nib.
+    
+    }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

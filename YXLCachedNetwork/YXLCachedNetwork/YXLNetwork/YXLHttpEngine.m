@@ -17,7 +17,9 @@
 @property (nonatomic, strong) NSURLSession *urlSession;
 
 @property (nonatomic, strong) YXLError *engineError;
-
+@property (nonatomic, strong) YXLRequestModel *requestModel;
+@property (nonatomic, assign) BOOL isSucceeded;
+@property (nonatomic, strong) id responseData;
 
 @end
 
@@ -35,68 +37,83 @@
 - (void)fetchDataWithRequestModel:(YXLRequestModel *)requestModel
                           success:(ResponseSuceessBlock)sucessBlock
                           failure:(ResponseFailureBlock)failureBlock {
-    NSURL *url = [self assemblyUrlWithRequestModel:requestModel];
-    NSURLSessionDataTask *dataTask = [self.urlSession dataTaskWithURL:url completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-        if (error)
-        {
-            if (!self.engineError) {
-                self.engineError = [[YXLError alloc] init];
-            }
-            self.engineError.detailError = error;
-            self.engineError.errorType = YXLNetworkType;
-            if (failureBlock) {
-                failureBlock(self.engineError);
-            }
-            NSLog(@"Error Happened When data Parsed, The Detail Error was %@", error);
-        }
-        else
-        {
-            id responseDic = [self handleData:data];
-            if (responseDic)
-            {
-                if (sucessBlock) {
-                    sucessBlock(responseDic);
-                }
-            }
-            else
-            {
-                if (failureBlock) {
-                    failureBlock(self.engineError);
-                }
-                NSLog(@"Error Happened When data Parsed, The Detail Error was %@", error);
-            }
-        }
-    }];
+    self.requestModel = requestModel;
+    self.isSucceeded = NO;
+    NSURL *url = [self assemblyUrl];
+    NSURLSessionDataTask *dataTask = [self.urlSession dataTaskWithURL:url
+                                                    completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+                                                        if (error)//网络访问错误
+                                                        {
+                                                            self.isSucceeded = NO;
+                                                            if (!self.engineError) {
+                                                                self.engineError = [[YXLError alloc] init];
+                                                            }
+                                                            self.engineError.detailError = error;
+                                                            self.engineError.errorType = YXLNetworkType;
+                                                        }
+                                                        else
+                                                        {
+                                                            if (!data) //网络返回空数据
+                                                            {
+                                                                self.isSucceeded = NO;
+                                                                if (!self.engineError) {
+                                                                    self.engineError = [[YXLError alloc] init];
+                                                                }
+                                                                self.engineError.detailError = [NSError errorWithDomain:YXLResponseDataErrorDomain code:YXLDataEmptyError userInfo:@{NSLocalizedDescriptionKey : @"返回数据为空"}];
+                                                                self.engineError.errorType = YXLDataEmpty;
+                                                            }
+                                                            else
+                                                            {
+                                                                [self handleData:data];
+                                                            }
+                                                        }
+                                                        if (self.isSucceeded)
+                                                        {
+                                                            if (sucessBlock) {
+                                                                sucessBlock(self.responseData);
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            
+                                                            if (failureBlock) {
+                                                                failureBlock(self.engineError);
+                                                            }
+                                                        }
+                                                    }];
     [dataTask resume];
-
+    
 }
 
-- (NSURL *)assemblyUrlWithRequestModel:(YXLRequestModel *)requestModel {
+
+- (NSURL *)assemblyUrl {
     NSMutableString *urlString = [NSMutableString stringWithCapacity:50];
-    [urlString appendString:requestModel.host];
-    [urlString appendFormat:@":%@", requestModel.port];
-    [urlString appendFormat:@"/%@", requestModel.functionId];
+    [urlString appendString:self.requestModel.host];
+    [urlString appendFormat:@":%@", self.requestModel.port];
+    [urlString appendFormat:@"/%@", self.requestModel.functionId];
     return [NSURL URLWithString:urlString];
 }
 
-- (id)handleData:(NSData *)data {
-    NSError *error;
-    id parsedData = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
-    if (!self.engineError) {
-        self.engineError = [[YXLError alloc] init];
-    }
-    self.engineError.detailError = error;
-    self.engineError.errorType = YXLDataParseType;
+- (void)handleData:(NSData *)data {
+    self.responseData = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:nil];
     
-    if (parsedData) {
+    if (self.responseData) //成功解析数据
+    {
+        self.isSucceeded = YES;
         //统一按照NSDictionary处理，不是字典型的也构造成字典
-        if (![parsedData isKindOfClass:[NSDictionary class]]) {
+        if (![self.responseData isKindOfClass:[NSDictionary class]]) {
             
         }
     }
-    
-    
-    return parsedData;
+    else
+    {
+        self.isSucceeded = NO;
+        if (!self.engineError) {
+            self.engineError = [[YXLError alloc] init];
+        }
+        self.engineError.detailError = [NSError errorWithDomain:YXLResponseDataErrorDomain code:YXLParseJsonEmptyError userInfo:@{NSLocalizedDescriptionKey : @"无法解析"}];
+        self.engineError.errorType = YXLDataParseType;
+    }
 }
 
 @end

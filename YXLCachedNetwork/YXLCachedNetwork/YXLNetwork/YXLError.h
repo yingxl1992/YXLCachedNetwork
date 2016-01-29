@@ -10,7 +10,8 @@
 
 typedef NS_ENUM(NSInteger, YXLErrorType) {
     YXLNetworkType,
-    YXLDataParseType
+    YXLDataParseType,
+    YXLDataEmpty
 };
 
 @interface YXLError : NSObject
