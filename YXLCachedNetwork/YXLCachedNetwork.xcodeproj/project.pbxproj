@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E217DE7F1C59B77300C6CA21 /* YXLHttpEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = E217DE7E1C59B77300C6CA21 /* YXLHttpEngine.m */; };
+		E217DE821C59E9D000C6CA21 /* YXLError.m in Sources */ = {isa = PBXBuildFile; fileRef = E217DE811C59E9D000C6CA21 /* YXLError.m */; };
+		E217DE861C59EC3500C6CA21 /* YXLUserModel.m in Sources */ = {isa = PBXBuildFile; fileRef = E217DE851C59EC3500C6CA21 /* YXLUserModel.m */; };
 		E2D0DFA31C5750A800E446A1 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = E2D0DFA21C5750A800E446A1 /* main.m */; };
 		E2D0DFA61C5750A800E446A1 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E2D0DFA51C5750A800E446A1 /* AppDelegate.m */; };
 		E2D0DFA91C5750A800E446A1 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E2D0DFA81C5750A800E446A1 /* ViewController.m */; };
@@ -15,6 +18,8 @@
 		E2D0DFB11C5750A800E446A1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E2D0DFAF1C5750A800E446A1 /* LaunchScreen.storyboard */; };
 		E2D0DFBC1C5750A800E446A1 /* YXLCachedNetworkTests.m in Sources */ = {isa = PBXBuildFile; fileRef = E2D0DFBB1C5750A800E446A1 /* YXLCachedNetworkTests.m */; };
 		E2D0DFC71C5750A800E446A1 /* YXLCachedNetworkUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = E2D0DFC61C5750A800E446A1 /* YXLCachedNetworkUITests.m */; };
+		E2D0DFD81C5762DC00E446A1 /* YXLHttpClient.m in Sources */ = {isa = PBXBuildFile; fileRef = E2D0DFD71C5762DC00E446A1 /* YXLHttpClient.m */; };
+		E2DFDC871C57786D00628CB0 /* YXLRequestModel.m in Sources */ = {isa = PBXBuildFile; fileRef = E2DFDC861C57786D00628CB0 /* YXLRequestModel.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -35,6 +40,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		E217DE7D1C59B77300C6CA21 /* YXLHttpEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = YXLHttpEngine.h; path = YXLNetwork/YXLHttpEngine.h; sourceTree = "<group>"; };
+		E217DE7E1C59B77300C6CA21 /* YXLHttpEngine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = YXLHttpEngine.m; path = YXLNetwork/YXLHttpEngine.m; sourceTree = "<group>"; };
+		E217DE801C59E9D000C6CA21 /* YXLError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = YXLError.h; path = YXLNetwork/YXLError.h; sourceTree = "<group>"; };
+		E217DE811C59E9D000C6CA21 /* YXLError.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = YXLError.m; path = YXLNetwork/YXLError.m; sourceTree = "<group>"; };
+		E217DE841C59EC3500C6CA21 /* YXLUserModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YXLUserModel.h; sourceTree = "<group>"; };
+		E217DE851C59EC3500C6CA21 /* YXLUserModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YXLUserModel.m; sourceTree = "<group>"; };
 		E2D0DF9E1C5750A800E446A1 /* YXLCachedNetwork.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = YXLCachedNetwork.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E2D0DFA21C5750A800E446A1 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		E2D0DFA41C5750A800E446A1 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -51,6 +62,10 @@
 		E2D0DFC21C5750A800E446A1 /* YXLCachedNetworkUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = YXLCachedNetworkUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E2D0DFC61C5750A800E446A1 /* YXLCachedNetworkUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = YXLCachedNetworkUITests.m; sourceTree = "<group>"; };
 		E2D0DFC81C5750A800E446A1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E2D0DFD61C5762DC00E446A1 /* YXLHttpClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = YXLHttpClient.h; path = YXLNetwork/YXLHttpClient.h; sourceTree = "<group>"; };
+		E2D0DFD71C5762DC00E446A1 /* YXLHttpClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = YXLHttpClient.m; path = YXLNetwork/YXLHttpClient.m; sourceTree = "<group>"; };
+		E2DFDC851C57786D00628CB0 /* YXLRequestModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = YXLRequestModel.h; path = YXLNetwork/YXLRequestModel.h; sourceTree = "<group>"; };
+		E2DFDC861C57786D00628CB0 /* YXLRequestModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = YXLRequestModel.m; path = YXLNetwork/YXLRequestModel.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -78,6 +93,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		E217DE831C59EC2100C6CA21 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				E217DE841C59EC3500C6CA21 /* YXLUserModel.h */,
+				E217DE851C59EC3500C6CA21 /* YXLUserModel.m */,
+			);
+			name = View;
+			sourceTree = "<group>";
+		};
 		E2D0DF951C5750A800E446A1 = {
 			isa = PBXGroup;
 			children = (
@@ -101,6 +125,9 @@
 		E2D0DFA01C5750A800E446A1 /* YXLCachedNetwork */ = {
 			isa = PBXGroup;
 			children = (
+				E217DE831C59EC2100C6CA21 /* View */,
+				E2D0DFD51C57524200E446A1 /* YXLCache */,
+				E2D0DFD41C57523600E446A1 /* YXLNetwork */,
 				E2D0DFA41C5750A800E446A1 /* AppDelegate.h */,
 				E2D0DFA51C5750A800E446A1 /* AppDelegate.m */,
 				E2D0DFA71C5750A800E446A1 /* ViewController.h */,
@@ -138,6 +165,28 @@
 				E2D0DFC81C5750A800E446A1 /* Info.plist */,
 			);
 			path = YXLCachedNetworkUITests;
+			sourceTree = "<group>";
+		};
+		E2D0DFD41C57523600E446A1 /* YXLNetwork */ = {
+			isa = PBXGroup;
+			children = (
+				E2D0DFD61C5762DC00E446A1 /* YXLHttpClient.h */,
+				E2D0DFD71C5762DC00E446A1 /* YXLHttpClient.m */,
+				E217DE7D1C59B77300C6CA21 /* YXLHttpEngine.h */,
+				E217DE7E1C59B77300C6CA21 /* YXLHttpEngine.m */,
+				E2DFDC851C57786D00628CB0 /* YXLRequestModel.h */,
+				E2DFDC861C57786D00628CB0 /* YXLRequestModel.m */,
+				E217DE801C59E9D000C6CA21 /* YXLError.h */,
+				E217DE811C59E9D000C6CA21 /* YXLError.m */,
+			);
+			name = YXLNetwork;
+			sourceTree = "<group>";
+		};
+		E2D0DFD51C57524200E446A1 /* YXLCache */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = YXLCache;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -273,8 +322,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E217DE821C59E9D000C6CA21 /* YXLError.m in Sources */,
 				E2D0DFA91C5750A800E446A1 /* ViewController.m in Sources */,
+				E217DE7F1C59B77300C6CA21 /* YXLHttpEngine.m in Sources */,
 				E2D0DFA61C5750A800E446A1 /* AppDelegate.m in Sources */,
+				E2DFDC871C57786D00628CB0 /* YXLRequestModel.m in Sources */,
+				E2D0DFD81C5762DC00E446A1 /* YXLHttpClient.m in Sources */,
+				E217DE861C59EC3500C6CA21 /* YXLUserModel.m in Sources */,
 				E2D0DFA31C5750A800E446A1 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -499,6 +553,7 @@
 				E2D0DFCD1C5750A800E446A1 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		E2D0DFCE1C5750A800E446A1 /* Build configuration list for PBXNativeTarget "YXLCachedNetworkTests" */ = {
 			isa = XCConfigurationList;
@@ -507,6 +562,7 @@
 				E2D0DFD01C5750A800E446A1 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		E2D0DFD11C5750A800E446A1 /* Build configuration list for PBXNativeTarget "YXLCachedNetworkUITests" */ = {
 			isa = XCConfigurationList;
@@ -515,6 +571,7 @@
 				E2D0DFD31C5750A800E446A1 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

@@ -7,6 +7,8 @@
 //
 
 #import "ViewController.h"
+#import "YXLHttpClient.h"
+#import "YXLRequestModel.h"
 
 @interface ViewController ()
 
@@ -17,6 +19,24 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
+    
+    YXLRequestModel *model = [[YXLRequestModel alloc] init];
+    model.functionId = @"users";
+    model.params = nil;
+    
+    YXLHttpClient *httpClient = [[YXLHttpClient alloc] init];
+    [httpClient fetchDataWithRequestModel:model
+                                  success:^(id data) {
+                                      if ([data isKindOfClass:[NSArray class]]) {
+                                          NSLog(@"NSArray");
+                                      }
+                                      if ([data isKindOfClass:[NSDictionary class]]) {
+                                          NSLog(@"NSDictionary");
+                                      }
+                                  }
+                                  failure:^(YXLError *error) {
+                                      
+                                  }];
 }
 
 - (void)didReceiveMemoryWarning {
