@@ -10,6 +10,7 @@
 #import "YXLHttpClient.h"
 #import "YXLHttpEngine.h"
 #import "YXLRequestModel.h"
+#import "YXLCache.h"
 
 @interface YXLHttpEngine()
 
@@ -21,6 +22,8 @@
 @property (nonatomic, assign) BOOL isSucceeded;
 @property (nonatomic, strong) id responseData;
 
+@property (nonatomic, strong) YXLCache *yxlCache;
+
 @end
 
 @implementation YXLHttpEngine
@@ -30,6 +33,8 @@
     if (self) {
         self.sessionConfiguration = [NSURLSessionConfiguration defaultSessionConfiguration];
         self.urlSession = [NSURLSession sessionWithConfiguration:self.sessionConfiguration];
+        
+        self.yxlCache = [[YXLCache alloc] init];
     }
     return self;
 }
@@ -39,8 +44,18 @@
                           failure:(ResponseFailureBlock)failureBlock {
     self.requestModel = requestModel;
     self.isSucceeded = NO;
-    NSURL *url = [self assemblyUrl];
-    NSURLSessionDataTask *dataTask = [self.urlSession dataTaskWithURL:url
+    NSString *url = [self assemblyUrl];
+    
+    NSData *cachedData = [self.yxlCache cachedDataWithUrl:url];
+    
+    if (cachedData) {
+        if (sucessBlock) {
+            sucessBlock(cachedData);
+        }
+        return;
+    }
+    
+    NSURLSessionDataTask *dataTask = [self.urlSession dataTaskWithURL:[NSURL URLWithString:url]
                                                     completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
                                                         if (error)//网络访问错误
                                                         {
@@ -69,8 +84,10 @@
                                                         }
                                                         if (self.isSucceeded)
                                                         {
+                                                            //转换Data->dic
+                                                            [self.yxlCache saveResponseData:self.responseData forUrl:url];
                                                             if (sucessBlock) {
-                                                                sucessBlock(self.responseData);
+                                                                sucessBlock(data);
                                                             }
                                                         }
                                                         else
@@ -86,12 +103,12 @@
 }
 
 
-- (NSURL *)assemblyUrl {
+- (NSString *)assemblyUrl {
     NSMutableString *urlString = [NSMutableString stringWithCapacity:50];
     [urlString appendString:self.requestModel.host];
     [urlString appendFormat:@":%@", self.requestModel.port];
     [urlString appendFormat:@"/%@", self.requestModel.functionId];
-    return [NSURL URLWithString:urlString];
+    return [urlString copy];
 }
 
 - (void)handleData:(NSData *)data {
