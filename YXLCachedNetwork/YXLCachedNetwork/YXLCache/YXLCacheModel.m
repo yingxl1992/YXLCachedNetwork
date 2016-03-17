@@ -18,6 +18,7 @@
         self.data = [aDecoder decodeObjectForKey:@"data"];
         self.expiresDate = [aDecoder decodeObjectForKey:@"expiresDate"];
         self.lastModifiedDate = [aDecoder decodeObjectForKey:@"lastModifiedDate"];
+        self.visitCount = [aDecoder decodeIntegerForKey:@"visitCount"];
     }
     return self;
 }
@@ -27,6 +28,7 @@
     [aCoder encodeObject:self.data forKey:@"data"];
     [aCoder encodeObject:self.expiresDate forKey:@"expiresDate"];
     [aCoder encodeObject:self.lastModifiedDate forKey:@"lastModifiedDate"];
+    [aCoder encodeInteger:self.visitCount forKey:@"visitCount"];
 }
 
 - (instancetype)initWithDic:(NSDictionary *)dic {

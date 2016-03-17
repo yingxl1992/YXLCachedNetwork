@@ -13,6 +13,7 @@
 		E22927E01C5B0CC200D3CDDE /* YXLURLCache.m in Sources */ = {isa = PBXBuildFile; fileRef = E22927DF1C5B0CC200D3CDDE /* YXLURLCache.m */; };
 		E22927E31C5B630400D3CDDE /* YXLAlertController.m in Sources */ = {isa = PBXBuildFile; fileRef = E22927E21C5B630400D3CDDE /* YXLAlertController.m */; };
 		E2407F151C8824F30061CF97 /* NSDate+RCF.m in Sources */ = {isa = PBXBuildFile; fileRef = E2407F141C8824F30061CF97 /* NSDate+RCF.m */; };
+		E2B2302C1C9A90FB00955588 /* YXLARCMemoryCache.m in Sources */ = {isa = PBXBuildFile; fileRef = E2B2302B1C9A90FB00955588 /* YXLARCMemoryCache.m */; };
 		E2D0DFA31C5750A800E446A1 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = E2D0DFA21C5750A800E446A1 /* main.m */; };
 		E2D0DFA61C5750A800E446A1 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E2D0DFA51C5750A800E446A1 /* AppDelegate.m */; };
 		E2D0DFA91C5750A800E446A1 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E2D0DFA81C5750A800E446A1 /* ViewController.m */; };
@@ -59,6 +60,8 @@
 		E22927E21C5B630400D3CDDE /* YXLAlertController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = YXLAlertController.m; path = YXLNetwork/YXLAlertController.m; sourceTree = "<group>"; };
 		E2407F131C8824F30061CF97 /* NSDate+RCF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSDate+RCF.h"; path = "YXLCache/NSDate+RCF.h"; sourceTree = "<group>"; };
 		E2407F141C8824F30061CF97 /* NSDate+RCF.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSDate+RCF.m"; path = "YXLCache/NSDate+RCF.m"; sourceTree = "<group>"; };
+		E2B2302A1C9A90FB00955588 /* YXLARCMemoryCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = YXLARCMemoryCache.h; path = YXLCache/YXLARCMemoryCache.h; sourceTree = "<group>"; };
+		E2B2302B1C9A90FB00955588 /* YXLARCMemoryCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = YXLARCMemoryCache.m; path = YXLCache/YXLARCMemoryCache.m; sourceTree = "<group>"; };
 		E2D0DF9E1C5750A800E446A1 /* YXLCachedNetwork.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = YXLCachedNetwork.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E2D0DFA21C5750A800E446A1 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		E2D0DFA41C5750A800E446A1 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -222,6 +225,8 @@
 				E2DEDB4B1C869768009B5661 /* YXLDiskCache.m */,
 				E2407F131C8824F30061CF97 /* NSDate+RCF.h */,
 				E2407F141C8824F30061CF97 /* NSDate+RCF.m */,
+				E2B2302A1C9A90FB00955588 /* YXLARCMemoryCache.h */,
+				E2B2302B1C9A90FB00955588 /* YXLARCMemoryCache.m */,
 			);
 			name = YXLCache;
 			sourceTree = "<group>";
@@ -373,6 +378,7 @@
 				E22927E01C5B0CC200D3CDDE /* YXLURLCache.m in Sources */,
 				E217DE861C59EC3500C6CA21 /* YXLUserModel.m in Sources */,
 				E2D0DFA31C5750A800E446A1 /* main.m in Sources */,
+				E2B2302C1C9A90FB00955588 /* YXLARCMemoryCache.m in Sources */,
 				E2DEDB431C868A0F009B5661 /* YXLMemoryCache.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

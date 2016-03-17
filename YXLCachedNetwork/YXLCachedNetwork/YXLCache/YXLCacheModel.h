@@ -19,7 +19,7 @@
 
 @property (nonatomic, strong) NSString *lastModifiedDate;
 
-
+@property (nonatomic, strong) NSInteger visitCount;
 
 - (instancetype)initWithDic:(NSDictionary *)dic;
 
