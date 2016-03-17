@@ -8,12 +8,16 @@
 
 #import <Foundation/Foundation.h>
 
+@class YXLCacheModel;
+
 @interface YXLMemoryCache : NSObject
+
+@property (nonatomic, assign) NSInteger memoryCapacity;//记录数据个数，超过个数限制后删除或转移对象
 
 + (instancetype)memoryCache;
 
-- (NSDictionary *)cachedMemoryDataWithUrl:(NSString *)url;
+- (YXLCacheModel *)cachedMemoryDataWithUrl:(NSString *)url;
 
-- (void)setCacheData:(NSData *)data forKey:(NSString *)key;
+- (void)setCacheData:(YXLCacheModel *)data forKey:(NSString *)key;
 
 @end

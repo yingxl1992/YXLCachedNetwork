@@ -3,6 +3,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
         <!--View Controller-->
@@ -18,19 +19,33 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="95T-cN-6Vg">
-                                <rect key="frame" x="281.5" y="285" width="37" height="30"/>
+                                <rect key="frame" x="281.5" y="560" width="37" height="30"/>
                                 <state key="normal" title="start!"/>
+                                <variation key="widthClass=compact" fixedFrame="YES">
+                                    <rect key="frame" x="181" y="560" width="37" height="30"/>
+                                </variation>
                                 <connections>
                                     <action selector="startRequese:" destination="BYZ-38-t0r" eventType="touchUpInside" id="T28-5G-CNW"/>
                                 </connections>
                             </button>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Arl-gi-ZR7">
+                                <rect key="frame" x="30" y="30" width="540" height="520"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </tableView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="95T-cN-6Vg" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="la9-9A-8oA"/>
-                            <constraint firstItem="95T-cN-6Vg" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="ygH-ur-3d0"/>
+                            <constraint firstItem="Arl-gi-ZR7" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="10" id="6he-Og-tKe"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="95T-cN-6Vg" secondAttribute="bottom" constant="10" id="Ovw-TC-hC3"/>
+                            <constraint firstItem="95T-cN-6Vg" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="Rm3-jQ-bwX"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="Arl-gi-ZR7" secondAttribute="trailing" constant="10" id="W7Z-vJ-bF7"/>
+                            <constraint firstItem="95T-cN-6Vg" firstAttribute="top" secondItem="Arl-gi-ZR7" secondAttribute="bottom" constant="10" id="WSU-Rb-XOx"/>
+                            <constraint firstItem="Arl-gi-ZR7" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="10" id="sGA-rI-5zj"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="mainTableView" destination="Arl-gi-ZR7" id="cot-st-J2q"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>

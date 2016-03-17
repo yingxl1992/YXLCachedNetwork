@@ -8,18 +8,21 @@
 
 #import <Foundation/Foundation.h>
 
-@interface YXLCacheModel : NSObject
+@interface YXLCacheModel : NSObject<NSCoding>
 
 @property (nonatomic, copy) NSString *key;
 
-//用于内存缓存的数据存储
-@property (nonatomic, strong) NSDictionary *data;
+//用于json等文本数据存储
+@property (nonatomic, copy) NSDictionary *data;
 
-//用于磁盘缓存的数据存储
-//@property (nonatomic, strong) NSString *fileUrl;
+@property (nonatomic, strong) NSString *expiresDate;
+
+@property (nonatomic, strong) NSString *lastModifiedDate;
+
+
 
 - (instancetype)initWithDic:(NSDictionary *)dic;
 
-- (NSDictionary *)serializeModel:(YXLCacheModel *)cacheModel;
++ (NSDictionary *)serializeModel:(YXLCacheModel *)cacheModel;
 
 @end

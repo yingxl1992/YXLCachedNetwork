@@ -8,10 +8,17 @@
 
 #import "YXLMemoryCache.h"
 #import "YXLCacheModel.h"
+#import "NSDate+RCF.h"
+#import "YXLDiskCache.h"
 
 @interface YXLMemoryCache ()
 
 @property (nonatomic, strong) NSMutableArray *memoryCaches;//便于实现队列等
+
+@property (nonatomic, strong) YXLDiskCache *diskCache;
+
+@property (nonatomic, strong) NSMutableArray *L1;
+@property (nonatomic, strong) NSMutableArray *L2;
 
 @end
 
@@ -25,28 +32,48 @@ static YXLMemoryCache *sharedMemoryCache;
     dispatch_once(&onceToken, ^{
         sharedMemoryCache = [[YXLMemoryCache alloc] init];
         sharedMemoryCache.memoryCaches = [NSMutableArray array];
+        sharedMemoryCache.memoryCapacity = 50;//代表请求个数，因为无法计算数据量
     });
     
     return sharedMemoryCache;    
 }
 
-- (NSDictionary *)cachedMemoryDataWithUrl:(NSString *)url {
+- (YXLCacheModel *)cachedMemoryDataWithUrl:(NSString *)url {
     for (YXLCacheModel *cache in _memoryCaches) {
         if ([cache.key isEqualToString:url]) {
             [_memoryCaches removeObject:cache];
-            return cache.data;
+            [_memoryCaches addObject:cache];
+            return cache;
         }
     }
     return nil;
 }
 
-- (void)setCacheData:(NSDictionary *)data forKey:(NSString *)key {
-    YXLCacheModel *cacheModel = [[YXLCacheModel alloc] init];
-    cacheModel.key = key;
-    cacheModel.data = data;
-    [_memoryCaches addObject:cacheModel];
+- (void)setCacheData:(YXLCacheModel *)data forKey:(NSString *)key {
+//    YXLCacheModel *cacheModel = [[YXLCacheModel alloc] initWithDic:data];
+    [_memoryCaches addObject:data];
     
-    //进行存储限制判断
+    if (_memoryCaches.count > _memoryCapacity) {
+        YXLCacheModel *deletedCacheModel = [self getExpiredOrLRUCacheModel];
+        [_memoryCaches removeObject:deletedCacheModel];
+        
+        if (!self.diskCache) {
+            self.diskCache = [[YXLDiskCache alloc] init];
+        }
+        [self.diskCache addCacheData:deletedCacheModel forKey:key];
+    }
+}
+
+- (YXLCacheModel *)getExpiredOrLRUCacheModel {
+    for (YXLCacheModel *cacheModel in _memoryCaches) {
+        NSString *expireDateString = cacheModel.expiresDate;
+        NSDate *expireDate = [NSDate dateFromRCFString:expireDateString];
+        NSDate *currentDate = [NSDate date];
+        if ([currentDate compare:expireDate] == NSOrderedDescending) {
+            return cacheModel;
+        }
+    }
+    return [_memoryCaches objectAtIndex:0];
 }
 
 @end

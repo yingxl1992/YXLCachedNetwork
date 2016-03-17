@@ -9,10 +9,12 @@
 #import <Foundation/Foundation.h>
 #import <CommonCrypto/CommonDigest.h>
 
+@class YXLCacheModel;
+
 @interface YXLDiskCache : NSObject
 
-- (NSDictionary *)cachedDataWithUrl:(NSString *)url;
+- (YXLCacheModel *)cachedDataWithUrl:(NSString *)url;
 
-- (void)addCacheData:(NSData *)data forKey:(NSString *)key;
+- (void)addCacheData:(YXLCacheModel *)data forKey:(NSString *)key;
 
 @end

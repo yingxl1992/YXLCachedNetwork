@@ -11,6 +11,24 @@
 
 @implementation YXLCacheModel
 
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
+    self = [super init];
+    if (self) {
+        self.key = [aDecoder decodeObjectForKey:@"key"];
+        self.data = [aDecoder decodeObjectForKey:@"data"];
+        self.expiresDate = [aDecoder decodeObjectForKey:@"expiresDate"];
+        self.lastModifiedDate = [aDecoder decodeObjectForKey:@"lastModifiedDate"];
+    }
+    return self;
+}
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+    [aCoder encodeObject:self.key forKey:@"key"];
+    [aCoder encodeObject:self.data forKey:@"data"];
+    [aCoder encodeObject:self.expiresDate forKey:@"expiresDate"];
+    [aCoder encodeObject:self.lastModifiedDate forKey:@"lastModifiedDate"];
+}
+
 - (instancetype)initWithDic:(NSDictionary *)dic {
     self = [super init];
     if (self) {
@@ -19,7 +37,7 @@
     return self;
 }
 
-- (NSDictionary *)serializeModel:(YXLCacheModel *)cacheModel {
++ (NSDictionary *)serializeModel:(YXLCacheModel *)cacheModel {
     NSMutableDictionary *dic = [NSMutableDictionary dictionary];
     unsigned int propsCount;
     objc_property_t *props = class_copyPropertyList([cacheModel class], &propsCount);
@@ -38,8 +56,6 @@
 
 - (void)setDataWithDic:(NSDictionary *)dic {
     [self setValuesForKeysWithDictionary:dic];
-//    self.key = [dic objectForKey:@"key"];
-//    self.data = [dic objectForKey:@"data"];
 }
 
 -(void)setValue:(id)value forUndefinedKey:(NSString *)key {

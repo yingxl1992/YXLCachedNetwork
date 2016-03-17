@@ -28,6 +28,9 @@ typedef NS_ENUM(NSInteger, YXLParseJsonErrorCode) {
 
 @interface YXLHttpEngine : NSObject
 
+@property (nonatomic, copy) ResponseSuceessBlock successBlock;
+@property (nonatomic, copy) ResponseFailureBlock failureBlock;
+
 - (void)fetchDataWithRequestModel:(YXLRequestModel *)requestModel
                           success:(ResponseSuceessBlock)sucessBlock
                           failure:(ResponseFailureBlock)failureBlock;

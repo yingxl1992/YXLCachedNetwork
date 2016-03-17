@@ -9,6 +9,7 @@
 #import "YXLCache.h"
 #import "YXLMemoryCache.h"
 #import "YXLDiskCache.h"
+#import "YXLCacheModel.h"
 
 @interface YXLCache ()
 
@@ -28,24 +29,29 @@
     return self;
 }
 
-- (NSDictionary *)cachedDataWithUrl:(NSString *)url {
-    NSDictionary *memoryCache = [self.memoryCache cachedMemoryDataWithUrl:url];
+- (YXLCacheModel *)cachedDataWithUrl:(NSString *)url {
+    YXLCacheModel *memoryCache = [self.memoryCache cachedMemoryDataWithUrl:url];
     if (memoryCache) {
         return memoryCache;
     }
     
-    NSDictionary *diskCache = [self.diskCache cachedDataWithUrl:url];
+    YXLCacheModel *diskCache = [self.diskCache cachedDataWithUrl:url];
     if (diskCache) {
+        [self.memoryCache setCacheData:diskCache forKey:url];
         return diskCache;
     }
     
     return nil;
 }
 
-- (void)saveResponseData:(NSData *)data forUrl:(NSString *)url {
+- (void)saveResponseData:(YXLCacheModel *)data forUrl:(NSString *)url {
     [self.memoryCache setCacheData:data forKey:url];
     
-    [self.diskCache addCacheData:data forKey:url];
+//    [self.diskCache addCacheData:data forKey:url];
+}
+
+- (void)saveResponseData:(NSDictionary *)data forUrl:(NSString *)url withLifeExpiration:(NSInteger)expiration {
+    
 }
 
 @end

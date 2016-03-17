@@ -12,19 +12,16 @@
 
 @interface YXLDiskCache ()
 
-//@property (nonatomic, strong) NSMutableDictionary *diskCaches;
-
 @end
 
 @implementation YXLDiskCache
 
-- (NSDictionary *)cachedDataWithUrl:(NSString *)url {
-//    YXLCacheModel *cacheModel = [_diskCaches objectForKey:url];
-    NSDictionary *cacheData = [self getDataWithURL:url];
+- (YXLCacheModel *)cachedDataWithUrl:(NSString *)url {
+    YXLCacheModel *cacheData = [self getDataWithURL:url];
     return cacheData;
 }
 
-- (void)addCacheData:(NSData *)data forKey:(NSString *)key {
+- (void)addCacheData:(YXLCacheModel *)data forKey:(NSString *)key {
     NSArray *array = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
     NSString *cacheUrl = [array objectAtIndex:0];
     NSString *fileUrl = [cacheUrl stringByAppendingString:[NSString stringWithFormat:@"/YXLDataCache/%@.plist", [self md5Encryption:key]]];
@@ -34,30 +31,27 @@
     }
     else {
         
-        NSFileManager *fileManager = [NSFileManager defaultManager];
-        NSString *directoryPath= [cacheUrl stringByAppendingString:@"/YXLDataCache"];
-        BOOL isFolderExist = [fileManager fileExistsAtPath:directoryPath];
-        if(!isFolderExist) {
-            [fileManager createDirectoryAtPath:directoryPath withIntermediateDirectories:YES attributes:nil error:nil];
+        BOOL res = [NSKeyedArchiver archiveRootObject:data toFile:fileUrl];
+        if (!res) {
+            //失败处理
         }
-        
-        [fileManager createFileAtPath:fileUrl contents:data attributes:nil];
+
         //增加存储限制判断
     }
 }
 
-- (NSDictionary *)getDataWithURL:(NSString *)url {
+- (YXLCacheModel *)getDataWithURL:(NSString *)url {
     NSArray *array = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
     NSString *cacheUrl = [array objectAtIndex:0];
     NSString *fileUrl = [cacheUrl stringByAppendingString:[NSString stringWithFormat:@"/YXLDataCache/%@.plist", [self md5Encryption:url]]];
     
-    if (![self isExistAtPath:fileUrl]) {
-        return nil;
-    }
+//    if (![self isExistAtPath:fileUrl]) {
+//        return nil;
+//    }
     
-    NSDictionary *dic = [NSDictionary dictionaryWithContentsOfFile:fileUrl];
+    YXLCacheModel *cacheModel = [NSKeyedUnarchiver unarchiveObjectWithFile:fileUrl];
     
-    return dic;
+    return cacheModel;
 }
 
 - (BOOL)isExistAtPath:(NSString *)filePath {

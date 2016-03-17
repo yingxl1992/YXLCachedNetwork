@@ -10,10 +10,17 @@
 #import "YXLHttpClient.h"
 #import "YXLRequestModel.h"
 #import "YXLError.h"
+#import "YXLUserModel.h"
+#import "YXLCache/YXLCacheModel.h"
 
-@interface ViewController ()
+@interface ViewController ()<UITableViewDataSource, UITableViewDelegate>
 
 @property (nonatomic, strong) UIAlertController *alertController;
+@property (weak, nonatomic) IBOutlet UITableView *mainTableView;
+
+@property (nonatomic, copy) NSArray *dataArray;
+
+@property (nonatomic, strong) YXLHttpClient *httpClient;
 
 @end
 
@@ -25,14 +32,14 @@
     model.params = nil;
 //    model.showToast = NO;
     
-    YXLHttpClient *httpClient = [[YXLHttpClient alloc] init];
-    [httpClient fetchDataWithRequestModel:model
+    if (!self.httpClient) {
+        self.httpClient = [[YXLHttpClient alloc] init];
+    }
+    [_httpClient fetchDataWithRequestModel:model
                                   success:^(id data) {
-                                      if ([data isKindOfClass:[NSArray class]]) {
-                                          NSLog(@"NSArray");
-                                      }
-                                      if ([data isKindOfClass:[NSDictionary class]]) {
-                                          NSLog(@"NSDictionary");
+                                      if ([data isKindOfClass:[YXLCacheModel class]]) {
+                                          self.dataArray = ((YXLCacheModel *)data).data[@"userList"];
+                                          [_mainTableView reloadData];
                                       }
                                   }
                                   failure:^(YXLError *error) {
@@ -44,7 +51,24 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
     
-    }
+    self.mainTableView.delegate = self;
+    self.mainTableView.dataSource = self;
+    
+    [_mainTableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"cell"];
+    
+}
+
+#pragma mark - UITableView
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return _dataArray.count;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell" forIndexPath:indexPath];
+    cell.textLabel.text = [_dataArray objectAtIndex:indexPath.row][@"username"];
+    return cell;
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
