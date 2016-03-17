@@ -8,6 +8,16 @@
 
 #import <Foundation/Foundation.h>
 
+@class YXLCacheModel;
+
 @interface YXLARCMemoryCache : NSObject
+
++ (instancetype)ARCMemoryCache;
+
+- (YXLCacheModel *)cachedMemoryDataWithUrl:(NSString *)url;
+
+- (void)setCacheData:(YXLCacheModel *)data forKey:(NSString *)key;
+
+- (void)setMemoryCapacity:(NSInteger)memoryCapacity;
 
 @end

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		005DD80D1C9A97B200FAE477 /* YXLARCDiskCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 005DD80C1C9A97B200FAE477 /* YXLARCDiskCache.m */; };
 		E217DE7F1C59B77300C6CA21 /* YXLHttpEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = E217DE7E1C59B77300C6CA21 /* YXLHttpEngine.m */; };
 		E217DE821C59E9D000C6CA21 /* YXLError.m in Sources */ = {isa = PBXBuildFile; fileRef = E217DE811C59E9D000C6CA21 /* YXLError.m */; };
 		E217DE861C59EC3500C6CA21 /* YXLUserModel.m in Sources */ = {isa = PBXBuildFile; fileRef = E217DE851C59EC3500C6CA21 /* YXLUserModel.m */; };
@@ -48,6 +49,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		005DD80B1C9A97B200FAE477 /* YXLARCDiskCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = YXLARCDiskCache.h; path = YXLCache/YXLARCDiskCache.h; sourceTree = "<group>"; };
+		005DD80C1C9A97B200FAE477 /* YXLARCDiskCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = YXLARCDiskCache.m; path = YXLCache/YXLARCDiskCache.m; sourceTree = "<group>"; };
 		E217DE7D1C59B77300C6CA21 /* YXLHttpEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = YXLHttpEngine.h; path = YXLNetwork/YXLHttpEngine.h; sourceTree = "<group>"; };
 		E217DE7E1C59B77300C6CA21 /* YXLHttpEngine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = YXLHttpEngine.m; path = YXLNetwork/YXLHttpEngine.m; sourceTree = "<group>"; };
 		E217DE801C59E9D000C6CA21 /* YXLError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = YXLError.h; path = YXLNetwork/YXLError.h; sourceTree = "<group>"; };
@@ -227,6 +230,8 @@
 				E2407F141C8824F30061CF97 /* NSDate+RCF.m */,
 				E2B2302A1C9A90FB00955588 /* YXLARCMemoryCache.h */,
 				E2B2302B1C9A90FB00955588 /* YXLARCMemoryCache.m */,
+				005DD80B1C9A97B200FAE477 /* YXLARCDiskCache.h */,
+				005DD80C1C9A97B200FAE477 /* YXLARCDiskCache.m */,
 			);
 			name = YXLCache;
 			sourceTree = "<group>";
@@ -365,6 +370,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E217DE821C59E9D000C6CA21 /* YXLError.m in Sources */,
+				005DD80D1C9A97B200FAE477 /* YXLARCDiskCache.m in Sources */,
 				E2D0DFA91C5750A800E446A1 /* ViewController.m in Sources */,
 				E217DE7F1C59B77300C6CA21 /* YXLHttpEngine.m in Sources */,
 				E2D0DFA61C5750A800E446A1 /* AppDelegate.m in Sources */,
