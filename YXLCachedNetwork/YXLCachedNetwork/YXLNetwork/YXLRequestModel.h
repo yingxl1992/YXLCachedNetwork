@@ -61,4 +61,6 @@ typedef NS_ENUM(NSInteger, YXLRequestCachePolicy) {
  */
 @property (nonatomic, assign) BOOL showToast;
 
+@property (nonatomic, strong) NSString *url;
+
 @end

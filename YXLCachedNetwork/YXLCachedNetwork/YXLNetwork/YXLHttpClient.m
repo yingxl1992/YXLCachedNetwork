@@ -40,7 +40,7 @@
                                        success:sucessBlock
                                        failure:^(YXLError *error){
                                            self.error = error;
-                                           [self handleFailureBlock];
+//                                           [self handleFailureBlock];
                                        }];
 }
 

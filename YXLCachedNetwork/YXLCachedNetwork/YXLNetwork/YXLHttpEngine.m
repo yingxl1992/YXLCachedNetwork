@@ -41,7 +41,7 @@
     self = [super init];
     if (self) {
         self.sessionConfiguration = [NSURLSessionConfiguration defaultSessionConfiguration];
-        self.urlSession = [NSURLSession sessionWithConfiguration:self.sessionConfiguration delegate:self delegateQueue:[NSOperationQueue mainQueue]];
+        self.urlSession = [NSURLSession sessionWithConfiguration:self.sessionConfiguration delegate:self delegateQueue:nil];
         
         self.yxlCache = [[YXLCache alloc] init];
     }
@@ -60,7 +60,9 @@
     self.failureBlock = failureBlock;
     
     self.isSucceeded = NO;
-    NSString *url = [self assemblyUrl];
+    NSString *url = requestModel.url;
+//    NSString *path = @"http://fr.radiovaticana.va/news/2015/02/01/le_pape_françois_à_sarajevo_le_6_juin_prochain/1121065";
+    NSString *escapedPath = [url stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
     
     YXLCacheModel *cachedData = [self.yxlCache cachedDataWithUrl:url];
     
@@ -73,7 +75,7 @@
     
     self.cacheModel = [[YXLCacheModel alloc] init];
     
-    NSURLSessionDataTask *dataTask = [self.urlSession dataTaskWithURL:[NSURL URLWithString:url]];
+    NSURLSessionDataTask *dataTask = [self.urlSession dataTaskWithURL:[NSURL URLWithString:escapedPath]];
     [dataTask resume];
 }
 
@@ -163,10 +165,9 @@
         }
         self.engineError.detailError = error;
         self.engineError.errorType = YXLNetworkType;
+        if (self.failureBlock) {
+            self.failureBlock(self.engineError);
+        }
     }
-    if (self.failureBlock) {
-        self.failureBlock(self.engineError);
-    }
-
 }
 @end

@@ -17,6 +17,8 @@
 @property (nonatomic, strong) YXLARCDiskCache *diskCache;
 @property (nonatomic, strong) NSMutableArray *L1;
 @property (nonatomic, strong) NSMutableArray *L2;
+@property (nonatomic, assign) NSInteger hitCount;
+
 
 @end
 
@@ -30,16 +32,19 @@ static YXLARCMemoryCache *sharedMemoryCache;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         sharedMemoryCache = [[YXLARCMemoryCache alloc] init];
-        sharedMemoryCache.memoryCapacity = 50;//代表请求个数，因为无法计算数据量，初始L1和L2大小
+        sharedMemoryCache.memoryCapacity = 10;//代表请求个数，因为无法计算数据量，初始L1和L2大小
         sharedMemoryCache.L1 = [NSMutableArray arrayWithCapacity:sharedMemoryCache.memoryCapacity];
         sharedMemoryCache.L2 = [NSMutableArray arrayWithCapacity:sharedMemoryCache.memoryCapacity];
+        sharedMemoryCache.hitCount = 0;
     });
     
     return sharedMemoryCache;
 }
 
 #pragma mark - public methods
+
 - (YXLCacheModel *)cachedMemoryDataWithUrl:(NSString *)key {
+    
     YXLCacheModel *cacheModel = nil;
     cacheModel = [self hasCache:key InQueue:self.L1];
     if (!cacheModel) {
@@ -47,6 +52,10 @@ static YXLARCMemoryCache *sharedMemoryCache;
         if (!cacheModel) {
             cacheModel = [self.diskCache cachedDataWithUrl:key];
         }
+    }
+    if (cacheModel) {
+        self.hitCount ++;
+        NSLog(@"===命中次数为：===%ld", (long)_hitCount);
     }
     return cacheModel;
 }
@@ -91,7 +100,7 @@ static YXLARCMemoryCache *sharedMemoryCache;
 
 - (YXLCacheModel *)hasCache:(NSString *)url InQueue:(NSMutableArray *)queue {
     for (YXLCacheModel *cache in queue) {
-        if ([cache.key isEqualToString:url]) {
+        if ([cache.key isEqualToString:[url stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]]]) {
             return cache;
         }
     }

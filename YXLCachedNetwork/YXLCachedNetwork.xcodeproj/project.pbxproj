@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		005DD80D1C9A97B200FAE477 /* YXLARCDiskCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 005DD80C1C9A97B200FAE477 /* YXLARCDiskCache.m */; };
+		E201C8E31C9BFB2200D551C0 /* testURL.plist in Resources */ = {isa = PBXBuildFile; fileRef = E201C8E21C9BFB2200D551C0 /* testURL.plist */; };
 		E217DE7F1C59B77300C6CA21 /* YXLHttpEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = E217DE7E1C59B77300C6CA21 /* YXLHttpEngine.m */; };
 		E217DE821C59E9D000C6CA21 /* YXLError.m in Sources */ = {isa = PBXBuildFile; fileRef = E217DE811C59E9D000C6CA21 /* YXLError.m */; };
 		E217DE861C59EC3500C6CA21 /* YXLUserModel.m in Sources */ = {isa = PBXBuildFile; fileRef = E217DE851C59EC3500C6CA21 /* YXLUserModel.m */; };
@@ -51,6 +52,7 @@
 /* Begin PBXFileReference section */
 		005DD80B1C9A97B200FAE477 /* YXLARCDiskCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = YXLARCDiskCache.h; path = YXLCache/YXLARCDiskCache.h; sourceTree = "<group>"; };
 		005DD80C1C9A97B200FAE477 /* YXLARCDiskCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = YXLARCDiskCache.m; path = YXLCache/YXLARCDiskCache.m; sourceTree = "<group>"; };
+		E201C8E21C9BFB2200D551C0 /* testURL.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = testURL.plist; sourceTree = "<group>"; };
 		E217DE7D1C59B77300C6CA21 /* YXLHttpEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = YXLHttpEngine.h; path = YXLNetwork/YXLHttpEngine.h; sourceTree = "<group>"; };
 		E217DE7E1C59B77300C6CA21 /* YXLHttpEngine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = YXLHttpEngine.m; path = YXLNetwork/YXLHttpEngine.m; sourceTree = "<group>"; };
 		E217DE801C59E9D000C6CA21 /* YXLError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = YXLError.h; path = YXLNetwork/YXLError.h; sourceTree = "<group>"; };
@@ -135,6 +137,7 @@
 				E2D0DFA11C5750A800E446A1 /* Supporting Files */,
 				E217DE841C59EC3500C6CA21 /* YXLUserModel.h */,
 				E217DE851C59EC3500C6CA21 /* YXLUserModel.m */,
+				E201C8E21C9BFB2200D551C0 /* testURL.plist */,
 			);
 			name = Demo;
 			sourceTree = "<group>";
@@ -344,6 +347,7 @@
 			files = (
 				E2D0DFB11C5750A800E446A1 /* LaunchScreen.storyboard in Resources */,
 				E2D0DFAE1C5750A800E446A1 /* Assets.xcassets in Resources */,
+				E201C8E31C9BFB2200D551C0 /* testURL.plist in Resources */,
 				E2D0DFAC1C5750A800E446A1 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

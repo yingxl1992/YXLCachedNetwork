@@ -18,6 +18,7 @@
         self.port = @"8080";
         self.requestCachePolicy = YXLRequestCacheBothLocalAndRemoteData;
         self.showToast = YES;
+        self.url = @"";
     }
     return self;
 }

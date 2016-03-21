@@ -7,7 +7,7 @@
 //
 
 #import "YXLARCDiskCache.h"
-#import "YXLCacheModel.m"
+#import "YXLCacheModel.h"
 
 NSString *const YXLARCDiskCacheB1Path = @"/YXLDataCache/B1.plist";
 NSString *const YXLARCDiskCacheB2Path = @"/YXLDataCache/B2.plist";
@@ -30,7 +30,7 @@ static YXLARCDiskCache *sharedDiskCache;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         sharedDiskCache = [[YXLARCDiskCache alloc] init];
-        sharedDiskCache.memoryCapacity = 50;//代表请求个数，因为无法计算数据量，初始L1和L2大小
+        sharedDiskCache.memoryCapacity = 10;//代表请求个数，因为无法计算数据量，初始L1和L2大小
         sharedDiskCache.B1 = [sharedDiskCache loadHistoryDataWithFlag:0];
         sharedDiskCache.B2 = [sharedDiskCache loadHistoryDataWithFlag:1];
     });
@@ -90,7 +90,7 @@ static YXLARCDiskCache *sharedDiskCache;
 
 - (BOOL)hasCacheDataForKey:(NSString *)key inQueue:(NSMutableArray *)queue {
     for(NSString *url in queue) {
-        if([url isEqualToString:key]) {
+        if([url isEqualToString:[key stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]]]) {
             return YES;
         }
     }
@@ -140,7 +140,7 @@ static YXLARCDiskCache *sharedDiskCache;
     else {
         expandPath = @"/YXLDataCache/YXLARCDiskB2Cache";
     }
-    NSString *fileUrl = [cacheUrl stringByAppendingString:[NSString stringWithFormat:@"%@%@.plist", expandPath, [self md5Encryption:key]]];
+    NSString *fileUrl = [cacheUrl stringByAppendingString:[NSString stringWithFormat:@"%@%@.plist", expandPath, key]];
     return fileUrl;
 }
 

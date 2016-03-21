@@ -7,14 +7,16 @@
 //
 
 #import "YXLCache.h"
-#import "YXLMemoryCache.h"
-#import "YXLDiskCache.h"
+#import "YXLARCMemoryCache.h"
+//#import "YXLARCDiskCache.h"
+//#import "YXLMemoryCache.h"
+//#import "YXLDiskCache.h"
 #import "YXLCacheModel.h"
 
 @interface YXLCache ()
 
-@property (nonatomic, strong) YXLMemoryCache *memoryCache;
-@property (nonatomic, strong) YXLDiskCache *diskCache;
+@property (nonatomic, strong) YXLARCMemoryCache *memoryCache;
+//@property (nonatomic, strong) YXLARCDiskCache *diskCache;
 
 @end
 
@@ -23,8 +25,8 @@
 - (instancetype)init {
     self = [super init];
     if (self) {
-        self.memoryCache = [YXLMemoryCache memoryCache];
-        self.diskCache = [[YXLDiskCache alloc] init];
+        self.memoryCache = [YXLARCMemoryCache ARCMemoryCache];
+//        self.diskCache = [YXLARCDiskCache ARCDiskCache];
     }
     return self;
 }
@@ -35,11 +37,11 @@
         return memoryCache;
     }
     
-    YXLCacheModel *diskCache = [self.diskCache cachedDataWithUrl:url];
-    if (diskCache) {
-        [self.memoryCache setCacheData:diskCache forKey:url];
-        return diskCache;
-    }
+//    YXLCacheModel *diskCache = [self.diskCache cachedDataWithUrl:url];
+//    if (diskCache) {
+//        [self.memoryCache setCacheData:diskCache forKey:url];
+//        return diskCache;
+//    }
     
     return nil;
 }
