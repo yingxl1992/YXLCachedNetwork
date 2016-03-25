@@ -27,6 +27,8 @@
 
 @property (nonatomic, strong) YXLCacheModel *cacheModel;
 
+@property (nonatomic, strong) NSDate *currentDate;
+
 //@property (nonatomic, copy) ResponseSuceessBlock successBlock;
 //
 //@property (nonatomic, copy) ResponseFailureBlock failureBlock;
@@ -64,19 +66,25 @@
 //    NSString *path = @"http://fr.radiovaticana.va/news/2015/02/01/le_pape_françois_à_sarajevo_le_6_juin_prochain/1121065";
     NSString *escapedPath = [url stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
     
+    self.currentDate = [NSDate date];
+    
     YXLCacheModel *cachedData = [self.yxlCache cachedDataWithUrl:url];
     
     if (cachedData) {
         if (self.successBlock) {
             self.successBlock(cachedData);
         }
+        double deltaTime = [[NSDate date] timeIntervalSinceDate:self.currentDate];
+        NSLog(@"time:%f", deltaTime);
         return;
     }
     
     self.cacheModel = [[YXLCacheModel alloc] init];
     
     NSURLSessionDataTask *dataTask = [self.urlSession dataTaskWithURL:[NSURL URLWithString:escapedPath]];
+    
     [dataTask resume];
+    
 }
 
 #pragma mark - Private Methods
@@ -141,6 +149,8 @@
     if (self.isSucceeded)
     {
         [self.yxlCache saveResponseData:self.cacheModel forUrl:dataTask.originalRequest.URL.absoluteString];
+        double deltaTime = [[NSDate date] timeIntervalSinceDate:self.currentDate];
+        NSLog(@"time:%f", deltaTime);
         if (self.successBlock) {
             self.successBlock(self.cacheModel.data);
         }

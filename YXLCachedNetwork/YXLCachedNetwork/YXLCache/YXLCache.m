@@ -48,7 +48,7 @@
 
 - (void)saveResponseData:(YXLCacheModel *)data forUrl:(NSString *)url {
     [self.memoryCache setCacheData:data forKey:url];
-    
+   
 //    [self.diskCache addCacheData:data forKey:url];
 }
 

@@ -30,7 +30,7 @@ static YXLARCDiskCache *sharedDiskCache;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         sharedDiskCache = [[YXLARCDiskCache alloc] init];
-        sharedDiskCache.memoryCapacity = 10;//代表请求个数，因为无法计算数据量，初始L1和L2大小
+        sharedDiskCache.memoryCapacity = 15     ;//代表请求个数，因为无法计算数据量，初始L1和L2大小
         sharedDiskCache.B1 = [sharedDiskCache loadHistoryDataWithFlag:0];
         sharedDiskCache.B2 = [sharedDiskCache loadHistoryDataWithFlag:1];
     });

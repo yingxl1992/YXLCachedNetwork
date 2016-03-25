@@ -13,7 +13,7 @@
 
 @interface YXLARCMemoryCache ()
 //@property (nonatomic, strong) NSMutableArray *memoryCaches;//便于实现队列等
-@property (nonatomic, assign) NSInteger memoryCapacity;//记录数据个数，超过个数限制后删除或转移对象
+//@property (nonatomic, assign) NSInteger memoryCapacity;//记录数据个数，超过个数限制后删除或转移对象
 @property (nonatomic, strong) YXLARCDiskCache *diskCache;
 @property (nonatomic, strong) NSMutableArray *L1;
 @property (nonatomic, strong) NSMutableArray *L2;
@@ -32,7 +32,7 @@ static YXLARCMemoryCache *sharedMemoryCache;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         sharedMemoryCache = [[YXLARCMemoryCache alloc] init];
-        sharedMemoryCache.memoryCapacity = 10;//代表请求个数，因为无法计算数据量，初始L1和L2大小
+        sharedMemoryCache.memoryCapacity = 15;//代表请求个数，因为无法计算数据量，初始L1和L2大小
         sharedMemoryCache.L1 = [NSMutableArray arrayWithCapacity:sharedMemoryCache.memoryCapacity];
         sharedMemoryCache.L2 = [NSMutableArray arrayWithCapacity:sharedMemoryCache.memoryCapacity];
         sharedMemoryCache.hitCount = 0;
@@ -57,6 +57,8 @@ static YXLARCMemoryCache *sharedMemoryCache;
         self.hitCount ++;
         NSLog(@"===命中次数为：===%ld", (long)_hitCount);
     }
+    NSLog(@"===队列1的大小：%ld", self.L1.count);
+    NSLog(@"===队列2的大小：%ld", self.L2.count);
     return cacheModel;
 }
 
@@ -64,6 +66,7 @@ static YXLARCMemoryCache *sharedMemoryCache;
 
     YXLCacheModel *cacheModel1 = [self hasCache:key InQueue:self.L1];
     if (cacheModel1) {
+        cacheModel1.visitCount ++;
         [self moveCache:cacheModel1 FromQueue:self.L1 ToQueue:self.L2];
     }
     else {
@@ -87,6 +90,7 @@ static YXLARCMemoryCache *sharedMemoryCache;
             }
             else {
                 [self.L1 insertObject:data atIndex:0];
+                [self checkQueueLimit:self.L1];
             }
         }
     }

@@ -12,6 +12,8 @@
 
 @interface YXLARCMemoryCache : NSObject
 
+@property (nonatomic, assign) NSInteger memoryCapacity;//记录数据个数，超过个数限制后删除或转移对象
+
 + (instancetype)ARCMemoryCache;
 
 - (YXLCacheModel *)cachedMemoryDataWithUrl:(NSString *)url;

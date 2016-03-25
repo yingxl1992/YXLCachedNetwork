@@ -61,7 +61,7 @@
     [_mainTableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"cell"];
     [_mainTableView reloadData];
     
-    for (int i = 0; i < 60; i++) {
+    for (int i = 0; i < 200; i++) {
         NSLog(@"第%d次===", i);
         [self timerFired];
         [NSThread sleepForTimeInterval:5.0f];
@@ -103,6 +103,7 @@
     NSLog(@"随机数：%d", value);
     NSString *url = _dataArray[value];
     [self loadDataWithURL:url];
+    
 }
 
 #pragma mark - UITableView
