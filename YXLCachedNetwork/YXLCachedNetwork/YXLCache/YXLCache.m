@@ -26,7 +26,6 @@
     self = [super init];
     if (self) {
         self.memoryCache = [YXLARCMemoryCache ARCMemoryCache];
-//        self.diskCache = [YXLARCDiskCache ARCDiskCache];
     }
     return self;
 }
@@ -38,12 +37,6 @@
 
 - (void)saveResponseData:(YXLCacheModel *)data forUrl:(NSString *)url {
     [self.memoryCache setCacheData:data forKey:url];
-   
-//    [self.diskCache addCacheData:data forKey:url];
-}
-
-- (void)saveResponseData:(NSDictionary *)data forUrl:(NSString *)url withLifeExpiration:(NSInteger)expiration {
-    
 }
 
 @end
