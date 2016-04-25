@@ -44,16 +44,33 @@ static YXLARCMemoryCache *sharedMemoryCache;
 #pragma mark - public methods
 
 - (YXLCacheModel *)cachedMemoryDataWithUrl:(NSString *)key {
-    
     YXLCacheModel *cacheModel = nil;
-    cacheModel = [self hasCache:key InQueue:self.L1];
-    if (!cacheModel) {
-        cacheModel = [self hasCache:key InQueue:self.L2];
+    cacheModel = [self hasCache:key InQueue:self.L1];//查找L1队列
+    if (cacheModel) {
+        [self moveCache:cacheModel FromQueue:self.L1 ToQueue:self.L2];
+        NSLog(@"在L1中命中");
+    }
+    else {
+        cacheModel = [self hasCache:key InQueue:self.L2];//查找L2队列
         if (!cacheModel) {
-            cacheModel = [self.diskCache cachedDataWithUrl:key];
+            cacheModel = [self.diskCache cachedDataWithUrl:key];//查询B1和B2，若有数据，则转移。。。
+            if(cacheModel) {
+                if (cacheModel.visitCount == 1) {
+                    NSLog(@"在B1中命中");
+                    [self.L1 insertObject:cacheModel atIndex:0];
+                }
+                else {
+                    NSLog(@"在B2中命中");
+                    [self.L2 insertObject:cacheModel atIndex:1];
+                }
+            }
+        }
+        else {
+            NSLog(@"在L2中命中");
         }
     }
     if (cacheModel) {
+        cacheModel.visitCount ++;
         self.hitCount ++;
         NSLog(@"===命中次数为：===%ld", (long)_hitCount);
     }
@@ -64,19 +81,20 @@ static YXLARCMemoryCache *sharedMemoryCache;
 
 - (void)setCacheData:(YXLCacheModel *)data forKey:(NSString *)key {
 
-    YXLCacheModel *cacheModel1 = [self hasCache:key InQueue:self.L1];
+    YXLCacheModel *cacheModel1 = [self hasCache:key InQueue:self.L1];//1、查找L1
     if (cacheModel1) {
         cacheModel1.visitCount ++;
-        [self moveCache:cacheModel1 FromQueue:self.L1 ToQueue:self.L2];
+        [self moveCache:cacheModel1 FromQueue:self.L1 ToQueue:self.L2];//若在L1则把它移动到L2
     }
-    else {
+    else {//否则查找L2
         YXLCacheModel *cacheModel2 = [self hasCache:key InQueue:self.L2];
-        if (cacheModel2) {
+        if (cacheModel2) {//在L2中，则把移动到L2的头部
+            cacheModel2.visitCount ++;
             [self.L2 removeObject:cacheModel2];
             [self.L2 insertObject:cacheModel2 atIndex:0];
         }
         else {
-            YXLCacheModel *cacheModel = [self.diskCache cachedDataWithUrl:key];
+            YXLCacheModel *cacheModel = [self.diskCache cachedDataWithUrl:key];//查找B1和B2
             if (cacheModel) {
                 self.memoryCapacity = self.memoryCapacity + 1;
                 if (cacheModel.visitCount == 1) {

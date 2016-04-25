@@ -33,17 +33,7 @@
 
 - (YXLCacheModel *)cachedDataWithUrl:(NSString *)url {
     YXLCacheModel *memoryCache = [self.memoryCache cachedMemoryDataWithUrl:url];
-    if (memoryCache) {
-        return memoryCache;
-    }
-    
-//    YXLCacheModel *diskCache = [self.diskCache cachedDataWithUrl:url];
-//    if (diskCache) {
-//        [self.memoryCache setCacheData:diskCache forKey:url];
-//        return diskCache;
-//    }
-    
-    return nil;
+    return memoryCache;
 }
 
 - (void)saveResponseData:(YXLCacheModel *)data forUrl:(NSString *)url {

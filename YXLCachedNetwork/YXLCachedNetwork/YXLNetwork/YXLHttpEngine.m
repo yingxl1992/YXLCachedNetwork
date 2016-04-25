@@ -63,11 +63,8 @@
     
     self.isSucceeded = NO;
     NSString *url = requestModel.url;
-//    NSString *path = @"http://fr.radiovaticana.va/news/2015/02/01/le_pape_françois_à_sarajevo_le_6_juin_prochain/1121065";
     NSString *escapedPath = [url stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
-    
-    self.currentDate = [NSDate date];
-    
+    //取缓存数据
     YXLCacheModel *cachedData = [self.yxlCache cachedDataWithUrl:url];
     
     if (cachedData) {
@@ -105,6 +102,7 @@
     self.cacheModel.expiresDate = [task.originalRequest valueForHTTPHeaderField:@"Expired"];
     self.cacheModel.lastModifiedDate = [task.originalRequest valueForHTTPHeaderField:@"Last-Modified"];
     self.cacheModel.data = responseData;
+    self.cacheModel.visitCount = 1;
 }
 
 - (NSDictionary *)handleData:(NSData *)data {
