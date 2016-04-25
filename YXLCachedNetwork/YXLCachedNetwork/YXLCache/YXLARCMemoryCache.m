@@ -15,8 +15,8 @@
 //@property (nonatomic, strong) NSMutableArray *memoryCaches;//便于实现队列等
 //@property (nonatomic, assign) NSInteger memoryCapacity;//记录数据个数，超过个数限制后删除或转移对象
 @property (nonatomic, strong) YXLARCDiskCache *diskCache;
-@property (nonatomic, strong) NSMutableArray *L1;
-@property (nonatomic, strong) NSMutableArray *L2;
+@property (nonatomic, copy) NSArray *L1;
+@property (nonatomic, copy) NSArray *L2;
 @property (nonatomic, assign) NSInteger hitCount;
 
 
@@ -33,8 +33,8 @@ static YXLARCMemoryCache *sharedMemoryCache;
     dispatch_once(&onceToken, ^{
         sharedMemoryCache = [[YXLARCMemoryCache alloc] init];
         sharedMemoryCache.memoryCapacity = 15;//代表请求个数，因为无法计算数据量，初始L1和L2大小
-        sharedMemoryCache.L1 = [NSMutableArray arrayWithCapacity:sharedMemoryCache.memoryCapacity];
-        sharedMemoryCache.L2 = [NSMutableArray arrayWithCapacity:sharedMemoryCache.memoryCapacity];
+        sharedMemoryCache.L1 = [NSArray array];
+        sharedMemoryCache.L2 = [NSArray array];
         sharedMemoryCache.hitCount = 0;
     });
     
@@ -54,14 +54,20 @@ static YXLARCMemoryCache *sharedMemoryCache;
         cacheModel = [self hasCache:key InQueue:self.L2];//查找L2队列
         if (!cacheModel) {
             cacheModel = [self.diskCache cachedDataWithUrl:key];//查询B1和B2，若有数据，则转移。。。
+            
             if(cacheModel) {
+                self.memoryCapacity = self.memoryCapacity + 1;
                 if (cacheModel.visitCount == 1) {
-                    NSLog(@"在B1中命中");
-                    [self.L1 insertObject:cacheModel atIndex:0];
+                    NSMutableArray *tmpQueue = [NSMutableArray arrayWithArray:self.L1];
+                    [tmpQueue insertObject:cacheModel atIndex:0];
+                    [self checkQueueLimit:tmpQueue];
+                    self.L1 = [tmpQueue copy];
                 }
                 else {
-                    NSLog(@"在B2中命中");
-                    [self.L2 insertObject:cacheModel atIndex:1];
+                    NSMutableArray *tmpQueue = [NSMutableArray arrayWithArray:self.L2];
+                    [tmpQueue insertObject:cacheModel atIndex:0];
+                    [self checkQueueLimit:tmpQueue];
+                    self.L2 = [tmpQueue copy];
                 }
             }
         }
@@ -80,38 +86,12 @@ static YXLARCMemoryCache *sharedMemoryCache;
 }
 
 - (void)setCacheData:(YXLCacheModel *)data forKey:(NSString *)key {
-
-    YXLCacheModel *cacheModel1 = [self hasCache:key InQueue:self.L1];//1、查找L1
-    if (cacheModel1) {
-        cacheModel1.visitCount ++;
-        [self moveCache:cacheModel1 FromQueue:self.L1 ToQueue:self.L2];//若在L1则把它移动到L2
-    }
-    else {//否则查找L2
-        YXLCacheModel *cacheModel2 = [self hasCache:key InQueue:self.L2];
-        if (cacheModel2) {//在L2中，则把移动到L2的头部
-            cacheModel2.visitCount ++;
-            [self.L2 removeObject:cacheModel2];
-            [self.L2 insertObject:cacheModel2 atIndex:0];
-        }
-        else {
-            YXLCacheModel *cacheModel = [self.diskCache cachedDataWithUrl:key];//查找B1和B2
-            if (cacheModel) {
-                self.memoryCapacity = self.memoryCapacity + 1;
-                if (cacheModel.visitCount == 1) {
-                    [self.L1 insertObject:cacheModel atIndex:0];
-                    [self checkQueueLimit:self.L1];
-                }
-                else {
-                    [self.L2 insertObject:cacheModel atIndex:0];
-                    [self checkQueueLimit:self.L2];
-                }
-            }
-            else {
-                [self.L1 insertObject:data atIndex:0];
-                [self checkQueueLimit:self.L1];
-            }
-        }
-    }
+    NSMutableArray *tmpQueue1 = [NSMutableArray arrayWithArray:self.L1];
+    [tmpQueue1 insertObject:data atIndex:0];
+    [self checkQueueLimit:tmpQueue1];
+    self.L1 = [tmpQueue1 copy];
+    NSLog(@"===队列1的大小：%ld", self.L1.count);
+    NSLog(@"===队列2的大小：%ld", self.L2.count);
 }
 
 - (void)setMemoryCapacity:(NSInteger)memoryCapacity {
@@ -120,7 +100,7 @@ static YXLARCMemoryCache *sharedMemoryCache;
 
 #pragma mark - private methods
 
-- (YXLCacheModel *)hasCache:(NSString *)url InQueue:(NSMutableArray *)queue {
+- (YXLCacheModel *)hasCache:(NSString *)url InQueue:(NSArray *)queue {
     for (YXLCacheModel *cache in queue) {
         if ([cache.key isEqualToString:[url stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]]]) {
             return cache;
@@ -129,10 +109,14 @@ static YXLARCMemoryCache *sharedMemoryCache;
     return nil;
 }
 
-- (void)moveCache:(YXLCacheModel *)cache FromQueue:(NSMutableArray *)queue1 ToQueue:(NSMutableArray *)queue2 {
-    [queue1 removeObject:cache];
-    [queue2 insertObject:cache atIndex:0];
-    [self checkQueueLimit:queue2];
+- (void)moveCache:(YXLCacheModel *)cache FromQueue:(NSArray *)queue1 ToQueue:(NSArray *)queue2 {
+    NSMutableArray *tmpQueue1 =[NSMutableArray arrayWithArray:queue1];
+    NSMutableArray *tmpQueue2 =[NSMutableArray arrayWithArray:queue2];
+    [tmpQueue1 removeObject:cache];
+    [tmpQueue2 insertObject:cache atIndex:0];
+    [self checkQueueLimit:tmpQueue2];
+    self.L1 = [tmpQueue1 copy];
+    self.L2 = [tmpQueue2 copy];
 }
 
 - (void)checkQueueLimit:(NSMutableArray *)queue {

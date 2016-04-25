@@ -15,8 +15,8 @@ NSString *const YXLARCDiskCacheB2Path = @"/YXLDataCache/B2.plist";
 @interface YXLARCDiskCache ()
 
 @property (nonatomic, assign) NSInteger memoryCapacity;
-@property (nonatomic, strong) NSMutableArray *B1;
-@property (nonatomic, strong) NSMutableArray *B2;
+@property (nonatomic, copy) NSArray *B1;
+@property (nonatomic, copy) NSArray *B2;
 
 @end
 
@@ -58,16 +58,19 @@ static YXLARCDiskCache *sharedDiskCache;
 }
 
 - (void)addCacheData:(YXLCacheModel *)data forKey:(NSString *)key {
-    
     if (data.visitCount == 1) {
-        [self.B1 insertObject:key atIndex:0];
+        NSMutableArray *tmpQueue = [NSMutableArray arrayWithArray:self.B1];
+        [tmpQueue insertObject:key atIndex:0];
         [self writeData:data ToQueue:0];
-        [self checkQueueLimitation:self.B1];
+        [self checkQueueLimitation:tmpQueue];
+        self.B1 = [tmpQueue copy];
     }
     else {
-        [self.B2 insertObject:key atIndex:0];
-        [self writeData:data ToQueue:1];
-        [self checkQueueLimitation:self.B2];
+        NSMutableArray *tmpQueue = [NSMutableArray arrayWithArray:self.B2];
+        [tmpQueue insertObject:key atIndex:0];
+        [self writeData:data ToQueue:0];
+        [self checkQueueLimitation:tmpQueue];
+        self.B2 = [tmpQueue copy];
     }
 }
 
@@ -88,7 +91,7 @@ static YXLARCDiskCache *sharedDiskCache;
     return queue;
 }
 
-- (BOOL)hasCacheDataForKey:(NSString *)key inQueue:(NSMutableArray *)queue {
+- (BOOL)hasCacheDataForKey:(NSString *)key inQueue:(NSArray *)queue {
     for(NSString *url in queue) {
         if([url isEqualToString:[key stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]]]) {
             return YES;

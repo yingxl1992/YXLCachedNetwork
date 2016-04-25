@@ -72,7 +72,7 @@
             self.successBlock(cachedData);
         }
         double deltaTime = [[NSDate date] timeIntervalSinceDate:self.currentDate];
-        NSLog(@"time:%f", deltaTime);
+//        NSLog(@"time:%f", deltaTime);
         return;
     }
     
@@ -148,7 +148,7 @@
     {
         [self.yxlCache saveResponseData:self.cacheModel forUrl:dataTask.originalRequest.URL.absoluteString];
         double deltaTime = [[NSDate date] timeIntervalSinceDate:self.currentDate];
-        NSLog(@"time:%f", deltaTime);
+//        NSLog(@"time:%f", deltaTime);
         if (self.successBlock) {
             self.successBlock(self.cacheModel.data);
         }

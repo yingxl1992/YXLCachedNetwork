@@ -31,23 +31,18 @@
     NSString *plistPath = [[NSBundle mainBundle] pathForResource:@"testURL" ofType:@"plist"];
     NSMutableDictionary *data = [[NSMutableDictionary alloc] initWithContentsOfFile:plistPath];
     self.dataArray = [data allValues];
-    self.indexs = @[@1, @1, @1, @1, @2, @2, @2, @2, @2,@2];
+//    self.indexs = @[@1, @1, @1, @1, @2, @2, @2, @2, @2,@2];
     self.count = 0;
-    //
-    //    for (int i = 0; i < self.indexs.count; i++, self.count = self.count + 1) {
-    //        NSLog(@"第%d次===", i);
-    //
-    //
-    //        [self timerFired];
-    //        [NSThread sleepForTimeInterval:5.0f];
-    //    }
-    for (int i = 0; i < 50; i++) {
+    for (int i = 0; i < 100; i++) {
         NSLog(@"第%d次===", i);
-        
-        
         [self timerFired];
-        [NSThread sleepForTimeInterval:5.0f];
+        [NSThread sleepForTimeInterval:10.0f];
     }
+//    for (int i = 0; i < self.indexs.count; i++, self.count ++) {
+//        NSLog(@"第%d次===", i);
+//        [self timerFired];
+//        [NSThread sleepForTimeInterval:10.0f];
+//    }
 }
 
 - (void)viewDidLoad {
@@ -56,9 +51,11 @@
 }
 
 - (void)timerFired {
-    NSInteger valueIndex = ((NSNumber *)_indexs[_count]).integerValue;
+//    NSInteger valueIndex = ((NSNumber *)_indexs[_count]).integerValue;
+    int valueIndex = arc4random() % _dataArray.count;
+    NSLog(@"===index===%d", valueIndex);
     NSString *url = _dataArray[valueIndex];
-    NSLog(@"url为%@", url);
+//    NSLog(@"url为%@", url);
     [self loadDataWithURL:url];
 }
 
