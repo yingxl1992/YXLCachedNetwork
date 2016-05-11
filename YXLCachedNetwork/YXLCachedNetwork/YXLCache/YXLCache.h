@@ -10,6 +10,8 @@
 
 #define YXLCache_DEFAULT_LIFE_EXPIRATION 864000
 
+//#define FIFO_CACHE_POLICY
+
 @class YXLCacheModel;
 
 @interface YXLCache : NSObject

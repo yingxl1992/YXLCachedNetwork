@@ -30,14 +30,22 @@
 }
 
 - (YXLCacheModel *)cachedDataWithUrl:(NSString *)url {
-//    YXLCacheModel *memoryCache = [self.arcMemoryCache cachedMemoryDataWithUrl:url];
+#ifndef FIFO_CACHE_POLICY
+    YXLCacheModel *memoryCache = [self.arcMemoryCache cachedMemoryDataWithUrl:url];
+#endif
+#ifdef FIFO_CACHE_POLICY
     YXLCacheModel *memoryCache = [self.memoryCache cachedMemoryDataWithUrl:url];
+#endif
     return memoryCache;
 }
 
 - (void)saveResponseData:(YXLCacheModel *)data forUrl:(NSString *)url {
-//    [self.arcMemoryCache setCacheData:data forKey:url];
+#ifndef FIFO_CACHE_POLICY
+    [self.arcMemoryCache setCacheData:data forKey:url];
+#endif
+#ifdef FIFO_CACHE_POLICY
     [self.memoryCache setCacheData:data forKey:url];
+#endif
 }
 
 @end
