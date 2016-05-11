@@ -12,8 +12,9 @@
 #import "YXLRequestModel.h"
 #import "YXLCache.h"
 #import "YXLCacheModel.h"
+#import "YXLImageCache.h"
 
-@interface YXLHttpEngine()<NSURLSessionDataDelegate, NSURLSessionTaskDelegate>
+@interface YXLHttpEngine()<NSURLSessionDataDelegate, NSURLSessionTaskDelegate, NSURLSessionDownloadDelegate>
 
 @property (nonatomic, strong) NSURLSessionConfiguration *sessionConfiguration;
 @property (nonatomic, strong) NSURLSession *urlSession;
@@ -33,6 +34,8 @@
 //
 //@property (nonatomic, copy) ResponseFailureBlock failureBlock;
 
+@property (nonatomic, strong) YXLImageCache *imageCache;
+
 @end
 
 @implementation YXLHttpEngine
@@ -46,12 +49,31 @@
         self.urlSession = [NSURLSession sessionWithConfiguration:self.sessionConfiguration delegate:self delegateQueue:nil];
         
         self.yxlCache = [[YXLCache alloc] init];
+        self.imageCache = [YXLImageCache sharedImageCache];
     }
     return self;
 }
 
 #pragma mark - Public Methods
 //获取图片数据用url，在两者之前再加判断
+- (void)fetchImageDataWithUrl:(NSString *)imageUrl
+                      success:(ResponseSuceessBlock)sucessBlock
+                      failure:(ResponseFailureBlock)failureBlock {
+    self.successBlock = sucessBlock;
+    self.failureBlock = failureBlock;
+    
+    UIImage *cachedImage = [self.imageCache cachedImageDataWithUrl:imageUrl];
+    if (cachedImage) {
+        if(self.successBlock) {
+            self.successBlock(cachedImage);
+        }
+        return;
+        
+    }
+    imageUrl = [imageUrl stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+    NSURLSessionDownloadTask *downloadTask = [self.urlSession downloadTaskWithURL:[NSURL URLWithString:imageUrl]];
+    [downloadTask resume];
+}
 
 //获取json数据
 - (void)fetchDataWithRequestModel:(YXLRequestModel *)requestModel
@@ -68,10 +90,11 @@
     YXLCacheModel *cachedData = [self.yxlCache cachedDataWithUrl:url];
     
     if (cachedData) {
+        NSLog(@"命中===");
         if (self.successBlock) {
             self.successBlock(cachedData);
         }
-        double deltaTime = [[NSDate date] timeIntervalSinceDate:self.currentDate];
+//        double deltaTime = [[NSDate date] timeIntervalSinceDate:self.currentDate];
 //        NSLog(@"time:%f", deltaTime);
         return;
     }
@@ -147,7 +170,7 @@
     if (self.isSucceeded)
     {
         [self.yxlCache saveResponseData:self.cacheModel forUrl:dataTask.originalRequest.URL.absoluteString];
-        double deltaTime = [[NSDate date] timeIntervalSinceDate:self.currentDate];
+//        double deltaTime = [[NSDate date] timeIntervalSinceDate:self.currentDate];
 //        NSLog(@"time:%f", deltaTime);
         if (self.successBlock) {
             self.successBlock(self.cacheModel.data);
@@ -176,6 +199,21 @@
         if (self.failureBlock) {
             self.failureBlock(self.engineError);
         }
+    }
+}
+
+- (void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask didFinishDownloadingToURL:(NSURL *)location {
+
+    UIImage *downloadedImage = [UIImage imageWithData:
+                                [NSData dataWithContentsOfURL:location]];
+    NSError *error = nil;
+    [[NSFileManager defaultManager] removeItemAtURL:location error:&error];
+    if (error) {
+        NSLog(@"Fail to delete downloadTask %@", location.absoluteString);
+    }
+    [self.imageCache setImageData:downloadedImage forUrl:downloadTask.originalRequest.URL.absoluteString];
+    if (self.successBlock) {
+        self.successBlock(downloadedImage);
     }
 }
 @end

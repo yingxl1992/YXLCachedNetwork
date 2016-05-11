@@ -8,15 +8,13 @@
 
 #import "YXLCache.h"
 #import "YXLARCMemoryCache.h"
-//#import "YXLARCDiskCache.h"
-//#import "YXLMemoryCache.h"
-//#import "YXLDiskCache.h"
+#import "YXLMemoryCache.h"
 #import "YXLCacheModel.h"
 
 @interface YXLCache ()
 
-@property (nonatomic, strong) YXLARCMemoryCache *memoryCache;
-//@property (nonatomic, strong) YXLARCDiskCache *diskCache;
+@property (nonatomic, strong) YXLARCMemoryCache *arcMemoryCache;
+@property (nonatomic, strong) YXLMemoryCache *memoryCache;
 
 @end
 
@@ -25,17 +23,20 @@
 - (instancetype)init {
     self = [super init];
     if (self) {
-        self.memoryCache = [YXLARCMemoryCache ARCMemoryCache];
+        self.arcMemoryCache = [YXLARCMemoryCache ARCMemoryCache];
+        self.memoryCache = [YXLMemoryCache memoryCache];
     }
     return self;
 }
 
 - (YXLCacheModel *)cachedDataWithUrl:(NSString *)url {
+//    YXLCacheModel *memoryCache = [self.arcMemoryCache cachedMemoryDataWithUrl:url];
     YXLCacheModel *memoryCache = [self.memoryCache cachedMemoryDataWithUrl:url];
     return memoryCache;
 }
 
 - (void)saveResponseData:(YXLCacheModel *)data forUrl:(NSString *)url {
+//    [self.arcMemoryCache setCacheData:data forKey:url];
     [self.memoryCache setCacheData:data forKey:url];
 }
 

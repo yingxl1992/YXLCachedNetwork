@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15A284" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
@@ -24,10 +24,19 @@
                                     <action selector="startTest:" destination="BYZ-38-t0r" eventType="touchUpInside" id="ot4-bq-5jd"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nd4-yP-ee4">
+                                <rect key="frame" x="262" y="433" width="76" height="30"/>
+                                <state key="normal" title="Test Image"/>
+                                <connections>
+                                    <action selector="startTestImage:" destination="BYZ-38-t0r" eventType="touchUpInside" id="wox-hb-c4L"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="nd4-yP-ee4" secondAttribute="bottom" constant="137" id="9Jt-g6-kEA"/>
                             <constraint firstItem="egk-f2-khz" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="EtW-aA-Ugq"/>
+                            <constraint firstItem="nd4-yP-ee4" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="ey8-Fk-oii"/>
                             <constraint firstItem="egk-f2-khz" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="vky-iV-1Rx"/>
                         </constraints>
                     </view>

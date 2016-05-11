@@ -13,7 +13,7 @@
 
 @interface YXLMemoryCache ()
 
-@property (nonatomic, strong) NSMutableArray *memoryCaches;//便于实现队列等
+@property (nonatomic, strong) NSArray *memoryCaches;//便于实现队列等
 
 @property (nonatomic, strong) YXLDiskCache *diskCache;
 
@@ -31,7 +31,7 @@ static YXLMemoryCache *sharedMemoryCache;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         sharedMemoryCache = [[YXLMemoryCache alloc] init];
-        sharedMemoryCache.memoryCaches = [NSMutableArray array];
+        sharedMemoryCache.memoryCaches = [NSArray array];
         sharedMemoryCache.memoryCapacity = 50;//代表请求个数，因为无法计算数据量
     });
     
@@ -39,10 +39,20 @@ static YXLMemoryCache *sharedMemoryCache;
 }
 
 - (YXLCacheModel *)cachedMemoryDataWithUrl:(NSString *)url {
+    YXLCacheModel *cacheModel = [self hasMemoryCacheDataForUrl:url];
+    if (!cacheModel) {
+        [self.diskCache cachedDataWithUrl:url];
+    }
+    return cacheModel;
+}
+
+- (YXLCacheModel *)hasMemoryCacheDataForUrl:(NSString *)url {
     for (YXLCacheModel *cache in _memoryCaches) {
-        if ([cache.key isEqualToString:url]) {
-            [_memoryCaches removeObject:cache];
-            [_memoryCaches addObject:cache];
+        if ([cache.key isEqualToString:[url stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]]]) {
+            NSMutableArray *tmpCaches = [NSMutableArray arrayWithArray:_memoryCaches];
+            [tmpCaches removeObject:cache];
+            [tmpCaches insertObject:cache atIndex:0];
+            self.memoryCaches = [tmpCaches copy];
             return cache;
         }
     }
@@ -50,30 +60,31 @@ static YXLMemoryCache *sharedMemoryCache;
 }
 
 - (void)setCacheData:(YXLCacheModel *)data forKey:(NSString *)key {
-//    YXLCacheModel *cacheModel = [[YXLCacheModel alloc] initWithDic:data];
-    [_memoryCaches addObject:data];
+    NSMutableArray *tmpArray = [NSMutableArray arrayWithArray:_memoryCaches];
+    [tmpArray insertObject:data atIndex:0];
     
     if (_memoryCaches.count > _memoryCapacity) {
-        YXLCacheModel *deletedCacheModel = [self getExpiredOrLRUCacheModel];
-        [_memoryCaches removeObject:deletedCacheModel];
+        YXLCacheModel *deletedCacheModel = [tmpArray lastObject];
+        [tmpArray removeObject:deletedCacheModel];
         
         if (!self.diskCache) {
             self.diskCache = [[YXLDiskCache alloc] init];
         }
         [self.diskCache addCacheData:deletedCacheModel forKey:key];
     }
+    self.memoryCaches = [tmpArray copy];
 }
 
-- (YXLCacheModel *)getExpiredOrLRUCacheModel {
-    for (YXLCacheModel *cacheModel in _memoryCaches) {
-        NSString *expireDateString = cacheModel.expiresDate;
-        NSDate *expireDate = [NSDate dateFromRCFString:expireDateString];
-        NSDate *currentDate = [NSDate date];
-        if ([currentDate compare:expireDate] == NSOrderedDescending) {
-            return cacheModel;
-        }
-    }
-    return [_memoryCaches objectAtIndex:0];
-}
+//- (YXLCacheModel *)getExpiredOrLRUCacheModel {
+//    for (YXLCacheModel *cacheModel in _memoryCaches) {
+//        NSString *expireDateString = cacheModel.expiresDate;
+//        NSDate *expireDate = [NSDate dateFromRCFString:expireDateString];
+//        NSDate *currentDate = [NSDate date];
+//        if ([currentDate compare:expireDate] == NSOrderedDescending) {
+//            return cacheModel;
+//        }
+//    }
+//    return [_memoryCaches objectAtIndex:0];
+//}
 
 @end

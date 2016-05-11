@@ -19,4 +19,8 @@
                           success:(ResponseSuceessBlock)sucessBlock
                           failure:(ResponseFailureBlock)failureBlock;
 
+- (void)fetchImageDataWithUrl:(NSString *)imageUrl
+                      success:(ResponseSuceessBlock)sucessBlock
+                      failure:(ResponseFailureBlock)failureBlock;
+
 @end

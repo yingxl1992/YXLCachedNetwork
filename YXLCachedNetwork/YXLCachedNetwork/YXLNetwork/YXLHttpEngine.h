@@ -35,4 +35,8 @@ typedef NS_ENUM(NSInteger, YXLParseJsonErrorCode) {
                           success:(ResponseSuceessBlock)sucessBlock
                           failure:(ResponseFailureBlock)failureBlock;
 
+- (void)fetchImageDataWithUrl:(NSString *)imageUrl
+                      success:(ResponseSuceessBlock)sucessBlock
+                      failure:(ResponseFailureBlock)failureBlock;
+
 @end

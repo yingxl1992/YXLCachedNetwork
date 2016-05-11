@@ -58,4 +58,14 @@
     }
 }
 
+- (void)fetchImageDataWithUrl:(NSString *)imageUrl
+                      success:(ResponseSuceessBlock)sucessBlock
+                      failure:(ResponseFailureBlock)failureBlock
+{
+    if (!self.httpEngine) {
+        self.httpEngine = [[YXLHttpEngine alloc] init];
+    }
+    [self.httpEngine fetchImageDataWithUrl:imageUrl success:sucessBlock failure:failureBlock];
+}
+
 @end

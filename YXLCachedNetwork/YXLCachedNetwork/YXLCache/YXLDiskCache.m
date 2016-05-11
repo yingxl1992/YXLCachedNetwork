@@ -22,9 +22,7 @@
 }
 
 - (void)addCacheData:(YXLCacheModel *)data forKey:(NSString *)key {
-    NSArray *array = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
-    NSString *cacheUrl = [array objectAtIndex:0];
-    NSString *fileUrl = [cacheUrl stringByAppendingString:[NSString stringWithFormat:@"/YXLDataCache/%@.plist", [self md5Encryption:key]]];
+    NSString *fileUrl = [self getFileURLforKey:key];
     
     if ([self isExistAtPath:fileUrl]) {
         //增加有效期等判断
@@ -41,17 +39,19 @@
 }
 
 - (YXLCacheModel *)getDataWithURL:(NSString *)url {
+    NSString *fileUrl = [self getFileURLforKey:url];
+    YXLCacheModel *cacheModel = [NSKeyedUnarchiver unarchiveObjectWithFile:fileUrl];
+    if (cacheModel) {
+        [[NSFileManager defaultManager] removeItemAtPath:fileUrl error:nil];
+    }
+    return cacheModel;
+}
+
+- (NSString *)getFileURLforKey:(NSString *)key {
     NSArray *array = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
     NSString *cacheUrl = [array objectAtIndex:0];
-    NSString *fileUrl = [cacheUrl stringByAppendingString:[NSString stringWithFormat:@"/YXLDataCache/%@.plist", [self md5Encryption:url]]];
-    
-//    if (![self isExistAtPath:fileUrl]) {
-//        return nil;
-//    }
-    
-    YXLCacheModel *cacheModel = [NSKeyedUnarchiver unarchiveObjectWithFile:fileUrl];
-    
-    return cacheModel;
+    NSString *fileUrl = [cacheUrl stringByAppendingString:[NSString stringWithFormat:@"/YXLDataCache/%@.plist", key]];
+    return fileUrl;
 }
 
 - (BOOL)isExistAtPath:(NSString *)filePath {

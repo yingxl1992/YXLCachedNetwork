@@ -18,6 +18,8 @@
 @property (nonatomic, copy) NSArray *dataArray;
 @property (nonatomic, strong) YXLHttpClient *httpClient;
 
+@property (nonatomic, strong) UIImageView *testImageView;
+
 @end
 
 @implementation ViewController
@@ -33,6 +35,36 @@
     }
 }
 
+- (IBAction)startTestImage:(id)sender {
+    if (!self.httpClient) {
+        self.httpClient = [[YXLHttpClient alloc] init];
+    }
+    NSString *imageUrl = @"http://m.360buyimg.com/mobilecms/s400x400_jfs/t2095/140/1463220859/279010/69131a15/56a1d73dNb054957c.jpg!q70.jpg";
+    [_httpClient fetchImageDataWithUrl:imageUrl
+                               success:^(id data){
+                                   __weak typeof(self) weakSelf = self;
+                                   dispatch_async(dispatch_get_main_queue(), ^{
+                                       __strong typeof(weakSelf) strongSelf = weakSelf;
+                                       if (!strongSelf) {
+                                           return;
+                                       }
+                                       if (strongSelf.testImageView) {
+                                           [strongSelf.testImageView removeFromSuperview];
+                                           strongSelf.testImageView = nil;
+                                       }
+                                       strongSelf.testImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 400, 400)];
+                                       
+//                                       UIImage *tmpImage = [UIImage imageWithData:data];
+                                       strongSelf.testImageView.image = data;
+                                       [strongSelf.view addSubview:strongSelf.testImageView];
+                                   });
+                                   
+                               }
+                               failure:^(YXLError *error) {
+                                   NSLog(@"下载图片失败");
+                               }];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
@@ -40,6 +72,7 @@
 
 - (void)timerFired {
     int valueIndex = arc4random() % _dataArray.count;
+//    int valueIndex = 10;
     NSLog(@"===index===%d", valueIndex);
     NSString *url = _dataArray[valueIndex];
     [self loadDataWithURL:url];
