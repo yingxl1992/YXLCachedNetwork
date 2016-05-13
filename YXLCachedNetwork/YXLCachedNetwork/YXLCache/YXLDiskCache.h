@@ -13,6 +13,8 @@
 
 @interface YXLDiskCache : NSObject
 
++ (instancetype)DiskCache;
+
 - (YXLCacheModel *)cachedDataWithUrl:(NSString *)url;
 
 - (void)addCacheData:(YXLCacheModel *)data forKey:(NSString *)key;

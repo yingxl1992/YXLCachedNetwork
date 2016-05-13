@@ -13,39 +13,40 @@
 
 @interface YXLCache ()
 
-@property (nonatomic, strong) YXLARCMemoryCache *arcMemoryCache;
-@property (nonatomic, strong) YXLMemoryCache *memoryCache;
+//@property (nonatomic, strong) YXLARCMemoryCache *arcMemoryCache;
+//@property (nonatomic, strong) YXLMemoryCache *memoryCache;
 
 @end
 
 @implementation YXLCache
 
-- (instancetype)init {
-    self = [super init];
-    if (self) {
-        self.arcMemoryCache = [YXLARCMemoryCache ARCMemoryCache];
-        self.memoryCache = [YXLMemoryCache memoryCache];
-    }
-    return self;
-}
+//- (instancetype)init {
+//    self = [super init];
+//    if (self) {
+//        self.arcMemoryCache = [YXLARCMemoryCache ARCMemoryCache];
+//        self.memoryCache = [YXLMemoryCache memoryCache];
+//    }
+//    return self;
+//}
 
 - (YXLCacheModel *)cachedDataWithUrl:(NSString *)url {
-#ifndef FIFO_CACHE_POLICY
-    YXLCacheModel *memoryCache = [self.arcMemoryCache cachedMemoryDataWithUrl:url];
-#endif
-#ifdef FIFO_CACHE_POLICY
-    YXLCacheModel *memoryCache = [self.memoryCache cachedMemoryDataWithUrl:url];
-#endif
+    YXLCacheModel *memoryCache;
+    if (_cacheType == YXLCacheType_ARC) {
+        memoryCache = [[YXLARCMemoryCache ARCMemoryCache] cachedMemoryDataWithUrl:url];
+    }
+    else {
+        memoryCache = [[YXLMemoryCache memoryCache] cachedMemoryDataWithUrl:url];
+    }
     return memoryCache;
 }
 
 - (void)saveResponseData:(YXLCacheModel *)data forUrl:(NSString *)url {
-#ifndef FIFO_CACHE_POLICY
-    [self.arcMemoryCache setCacheData:data forKey:url];
-#endif
-#ifdef FIFO_CACHE_POLICY
-    [self.memoryCache setCacheData:data forKey:url];
-#endif
+    if (_cacheType == YXLCacheType_ARC) {
+        [[YXLARCMemoryCache ARCMemoryCache] setCacheData:data forKey:url];
+    }
+    else {
+        [[YXLMemoryCache memoryCache] setCacheData:data forKey:url];
+    }
 }
 
 @end

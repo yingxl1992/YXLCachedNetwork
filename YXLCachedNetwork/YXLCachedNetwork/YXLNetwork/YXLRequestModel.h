@@ -30,6 +30,11 @@ typedef NS_ENUM(NSInteger, YXLRequestCachePolicy) {
     YXLRequestCacheLocalDataDontLoad
 };
 
+typedef NS_ENUM(NSInteger, YXLCacheType) {
+    YXLCacheType_FIFO,
+    YXLCacheType_ARC
+};
+
 @interface YXLRequestModel : NSObject
 
 /**
@@ -55,6 +60,11 @@ typedef NS_ENUM(NSInteger, YXLRequestCachePolicy) {
  *  默认是YXLRequestCacheBothLocalAndRemoteData
  */
 @property (nonatomic, assign) YXLRequestCachePolicy requestCachePolicy;
+
+/**
+ *  采用的缓存类型，默认ARC
+ */
+@property (nonatomic, assign) YXLCacheType cacheType;
 
 /**
  *  默认为YES

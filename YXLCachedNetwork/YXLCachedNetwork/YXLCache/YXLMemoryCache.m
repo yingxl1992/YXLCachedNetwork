@@ -13,12 +13,8 @@
 
 @interface YXLMemoryCache ()
 
-@property (nonatomic, strong) NSArray *memoryCaches;//便于实现队列等
-
-@property (nonatomic, strong) YXLDiskCache *diskCache;
-
-@property (nonatomic, strong) NSMutableArray *L1;
-@property (nonatomic, strong) NSMutableArray *L2;
+@property (nonatomic, strong) NSMutableArray *memoryCaches;//便于实现队列等
+@property (nonatomic, assign) NSInteger hitCount;
 
 @end
 
@@ -31,28 +27,34 @@ static YXLMemoryCache *sharedMemoryCache;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         sharedMemoryCache = [[YXLMemoryCache alloc] init];
-        sharedMemoryCache.memoryCaches = [NSArray array];
-        sharedMemoryCache.memoryCapacity = 50;//代表请求个数，因为无法计算数据量
+        sharedMemoryCache.memoryCaches = [NSMutableArray array];
+        sharedMemoryCache.memoryCapacity = 30;//代表请求个数，因为无法计算数据量
+        sharedMemoryCache.hitCount = 0;
     });
     
     return sharedMemoryCache;    
 }
 
 - (YXLCacheModel *)cachedMemoryDataWithUrl:(NSString *)url {
+    NSLog(@"memerycache的长度%ld", _memoryCaches.count);
     YXLCacheModel *cacheModel = [self hasMemoryCacheDataForUrl:url];
     if (!cacheModel) {
-        [self.diskCache cachedDataWithUrl:url];
+        [[YXLDiskCache DiskCache] cachedDataWithUrl:url];
     }
+    if (cacheModel) {
+        self.hitCount ++;
+        NSLog(@"===命中次数为：===%ld", (long)_hitCount);
+    }
+
     return cacheModel;
 }
 
 - (YXLCacheModel *)hasMemoryCacheDataForUrl:(NSString *)url {
-    for (YXLCacheModel *cache in _memoryCaches) {
+    NSArray *tmpArray = [_memoryCaches copy];
+    for (YXLCacheModel *cache in tmpArray) {
         if ([cache.key isEqualToString:[url stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]]]) {
-            NSMutableArray *tmpCaches = [NSMutableArray arrayWithArray:_memoryCaches];
-            [tmpCaches removeObject:cache];
-            [tmpCaches insertObject:cache atIndex:0];
-            self.memoryCaches = [tmpCaches copy];
+            [_memoryCaches removeObject:cache];
+            [_memoryCaches insertObject:cache atIndex:0];
             return cache;
         }
     }
@@ -60,19 +62,14 @@ static YXLMemoryCache *sharedMemoryCache;
 }
 
 - (void)setCacheData:(YXLCacheModel *)data forKey:(NSString *)key {
-    NSMutableArray *tmpArray = [NSMutableArray arrayWithArray:_memoryCaches];
-    [tmpArray insertObject:data atIndex:0];
+    [_memoryCaches insertObject:data atIndex:0];
     
     if (_memoryCaches.count > _memoryCapacity) {
-        YXLCacheModel *deletedCacheModel = [tmpArray lastObject];
-        [tmpArray removeObject:deletedCacheModel];
-        
-        if (!self.diskCache) {
-            self.diskCache = [[YXLDiskCache alloc] init];
-        }
-        [self.diskCache addCacheData:deletedCacheModel forKey:key];
+        YXLCacheModel *deletedCacheModel = [_memoryCaches lastObject];
+        [_memoryCaches removeObject:deletedCacheModel];
+        [[YXLDiskCache DiskCache] addCacheData:deletedCacheModel forKey:key];
     }
-    self.memoryCaches = [tmpArray copy];
+    NSLog(@"memerycache的长度%ld", _memoryCaches.count);
 }
 
 //- (YXLCacheModel *)getExpiredOrLRUCacheModel {

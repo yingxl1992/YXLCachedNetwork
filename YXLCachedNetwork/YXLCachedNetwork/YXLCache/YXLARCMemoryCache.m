@@ -14,7 +14,7 @@
 @interface YXLARCMemoryCache ()
 //@property (nonatomic, strong) NSMutableArray *memoryCaches;//便于实现队列等
 //@property (nonatomic, assign) NSInteger memoryCapacity;//记录数据个数，超过个数限制后删除或转移对象
-@property (nonatomic, strong) YXLARCDiskCache *diskCache;
+//@property (nonatomic, strong) YXLARCDiskCache *diskCache;
 @property (nonatomic, copy) NSArray *L1;
 @property (nonatomic, copy) NSArray *L2;
 @property (nonatomic, assign) NSInteger hitCount;
@@ -53,7 +53,7 @@ static YXLARCMemoryCache *sharedMemoryCache;
     else {
         cacheModel = [self hasCache:key InQueue:self.L2];//查找L2队列
         if (!cacheModel) {
-            cacheModel = [self.diskCache cachedDataWithUrl:key];//查询B1和B2，若有数据，则转移。。。
+            cacheModel = [[YXLARCDiskCache ARCDiskCache] cachedDataWithUrl:key];//查询B1和B2，若有数据，则转移。。。
             
             if(cacheModel) {
                 self.memoryCapacity = self.memoryCapacity + 1;
@@ -128,7 +128,7 @@ static YXLARCMemoryCache *sharedMemoryCache;
 - (void)eliminateLastObjectInQueue:(NSMutableArray *)queue {
     YXLCacheModel *cacheModel = [queue lastObject];
     [queue removeObject:cacheModel];
-    [self.diskCache addCacheData:cacheModel forKey:cacheModel.key];
+    [[YXLARCDiskCache ARCDiskCache] addCacheData:cacheModel forKey:cacheModel.key];
 }
 
 @end

@@ -36,6 +36,8 @@
 
 @property (nonatomic, strong) YXLImageCache *imageCache;
 
+@property (nonatomic, assign) YXLCacheType cacheType;
+
 @end
 
 @implementation YXLHttpEngine
@@ -87,6 +89,8 @@
     NSString *url = requestModel.url;
     NSString *escapedPath = [url stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
     //取缓存数据
+    self.cacheType = requestModel.cacheType;
+    self.yxlCache.cacheType = requestModel.cacheType;
     YXLCacheModel *cachedData = [self.yxlCache cachedDataWithUrl:url];
     
     if (cachedData) {
@@ -164,11 +168,13 @@
         self.engineError.errorType = YXLDataEmpty;
     }
     else {
+        self.isSucceeded = YES;
         [self spliceData:data withTask:dataTask];
     }
     
     if (self.isSucceeded)
     {
+        self.yxlCache.cacheType = _cacheType;
         [self.yxlCache saveResponseData:self.cacheModel forUrl:dataTask.originalRequest.URL.absoluteString];
 //        double deltaTime = [[NSDate date] timeIntervalSinceDate:self.currentDate];
 //        NSLog(@"time:%f", deltaTime);

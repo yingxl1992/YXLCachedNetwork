@@ -30,7 +30,7 @@ static YXLARCDiskCache *sharedDiskCache;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         sharedDiskCache = [[YXLARCDiskCache alloc] init];
-        sharedDiskCache.memoryCapacity = 15     ;//代表请求个数，因为无法计算数据量，初始L1和L2大小
+        sharedDiskCache.memoryCapacity = 15;//代表请求个数，因为无法计算数据量，初始L1和L2大小
         sharedDiskCache.B1 = [sharedDiskCache loadHistoryDataWithFlag:0];
         sharedDiskCache.B2 = [sharedDiskCache loadHistoryDataWithFlag:1];
     });
@@ -60,14 +60,14 @@ static YXLARCDiskCache *sharedDiskCache;
 - (void)addCacheData:(YXLCacheModel *)data forKey:(NSString *)key {
     if (data.visitCount == 1) {
         NSMutableArray *tmpQueue = [NSMutableArray arrayWithArray:self.B1];
-        [tmpQueue insertObject:key atIndex:0];
+        [tmpQueue insertObject:data atIndex:0];
         [self writeData:data ToQueue:0];
         [self checkQueueLimitation:tmpQueue];
         self.B1 = [tmpQueue copy];
     }
     else {
         NSMutableArray *tmpQueue = [NSMutableArray arrayWithArray:self.B2];
-        [tmpQueue insertObject:key atIndex:0];
+        [tmpQueue insertObject:data atIndex:0];
         [self writeData:data ToQueue:0];
         [self checkQueueLimitation:tmpQueue];
         self.B2 = [tmpQueue copy];
@@ -79,21 +79,36 @@ static YXLARCDiskCache *sharedDiskCache;
 - (NSMutableArray *)loadHistoryDataWithFlag:(NSInteger)queueFlag {
     NSArray *array = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
     NSString *cacheUrl = [array objectAtIndex:0];
+    cacheUrl = [cacheUrl stringByAppendingPathExtension:@"YXLDataCache"];
     NSString *expandPath;
-    if(0 == queueFlag) {
-        expandPath = YXLARCDiskCacheB1Path;
+    if (queueFlag == 0) {
+        expandPath = @"YXLARCDiskB1Cache";
     }
-    else if(1 == queueFlag) {
-        expandPath = YXLARCDiskCacheB2Path;
+    else {
+        expandPath = @"YXLARCDiskB2Cache";
     }
-    NSString *fileUrl = [cacheUrl stringByAppendingString:expandPath];
+    cacheUrl = [cacheUrl stringByAppendingPathExtension:expandPath];
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    if (![fileManager fileExistsAtPath:cacheUrl]) {
+        [fileManager createDirectoryAtPath:cacheUrl withIntermediateDirectories:YES attributes:nil error:nil];
+    }
+    NSString *fileUrl = [cacheUrl stringByAppendingString:@"diskQueue.plist"];
+    if(![fileManager fileExistsAtPath:fileUrl]){
+        if (![fileManager createFileAtPath:fileUrl contents:nil attributes:nil]) {
+            NSLog(@"fail");
+        }
+    }
+
     NSMutableArray *queue = [NSKeyedUnarchiver unarchiveObjectWithFile:fileUrl];
+    if (!queue) {
+        queue = [NSMutableArray array];
+    }
     return queue;
 }
 
 - (BOOL)hasCacheDataForKey:(NSString *)key inQueue:(NSArray *)queue {
-    for(NSString *url in queue) {
-        if([url isEqualToString:[key stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]]]) {
+    for(YXLCacheModel *cacheModel in queue) {
+        if([cacheModel.key isEqualToString:[key stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]]]) {
             return YES;
         }
     }
@@ -101,13 +116,13 @@ static YXLARCDiskCache *sharedDiskCache;
 }
 
 - (YXLCacheModel *)getDataWithURL:(NSString *)url inQueueType: (NSInteger)queueType{
-    NSString *fileUrl = [self getFileURLWithQueueType:queueType forKey:url];
+    NSString *fileUrl = [self getFileURLWithQueueType:queueType forKey:[url stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]]];
     YXLCacheModel *cacheModel = [NSKeyedUnarchiver unarchiveObjectWithFile:fileUrl];
     return cacheModel;
 }
 
 - (void)removeCacheDataWithURL:(NSString *)url inQueueType:(NSInteger)queueType {
-    NSString *fileUrl = [self getFileURLWithQueueType:queueType forKey:url];
+    NSString *fileUrl = [self getFileURLWithQueueType:queueType forKey:[url stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]]];
     [[NSFileManager defaultManager] removeItemAtPath:fileUrl error:nil];
 }
 
@@ -136,14 +151,25 @@ static YXLARCDiskCache *sharedDiskCache;
 - (NSString *)getFileURLWithQueueType:(NSInteger)queueType forKey:(NSString *)key {
     NSArray *array = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
     NSString *cacheUrl = [array objectAtIndex:0];
+    cacheUrl = [cacheUrl stringByAppendingPathExtension:@"YXLDataCache"];
     NSString *expandPath;
     if (queueType == 0) {
-        expandPath = @"/YXLDataCache/YXLARCDiskB1Cache";
+        expandPath = @"YXLARCDiskB1Cache";
     }
     else {
-        expandPath = @"/YXLDataCache/YXLARCDiskB2Cache";
+        expandPath = @"YXLARCDiskB2Cache";
     }
-    NSString *fileUrl = [cacheUrl stringByAppendingString:[NSString stringWithFormat:@"%@%@.plist", expandPath, key]];
+    cacheUrl = [cacheUrl stringByAppendingPathExtension:expandPath];
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    if (![fileManager fileExistsAtPath:cacheUrl]) {
+        [fileManager createDirectoryAtPath:cacheUrl withIntermediateDirectories:YES attributes:nil error:nil];
+    }
+    NSString *fileUrl = [cacheUrl stringByAppendingString:[NSString stringWithFormat:@"/%@.plist", [self md5Encryption:key]]];
+    if(![fileManager fileExistsAtPath:fileUrl]){
+        if (![fileManager createFileAtPath:fileUrl contents:nil attributes:nil]) {
+            NSLog(@"fail");
+        }
+    }
     return fileUrl;
 }
 

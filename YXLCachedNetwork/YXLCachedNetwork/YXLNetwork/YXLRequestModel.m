@@ -19,6 +19,7 @@
         self.requestCachePolicy = YXLRequestCacheBothLocalAndRemoteData;
         self.showToast = YES;
         self.url = @"";
+        self.cacheType = YXLCacheType_ARC;
     }
     return self;
 }

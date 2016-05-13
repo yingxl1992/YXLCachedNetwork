@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "YXLRequestModel.h"
 
 #define YXLCache_DEFAULT_LIFE_EXPIRATION 864000
 
@@ -15,6 +16,8 @@
 @class YXLCacheModel;
 
 @interface YXLCache : NSObject
+
+@property (nonatomic, assign) YXLCacheType cacheType;
 
 - (YXLCacheModel *)cachedDataWithUrl:(NSString *)url;
 
